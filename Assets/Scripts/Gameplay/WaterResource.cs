@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class WaterResource : MonoBehaviour
 {
-    [field: SerializeField] public float Amount { get; private set; }
+    [SerializeField] public float StartingAmount = 100;
+    [HideInInspector] public float CurrentAmount { get; private set; }
 
     [SerializeField] private TextMeshProUGUI _waterAmountText;
 
@@ -17,18 +19,20 @@ public class WaterResource : MonoBehaviour
         {
             Debug.LogError("WaterAmountText is not assigned in WaterResource");
         }
-        else if (Amount <= 0)
-        {
-            Debug.LogError("WaterAmount is not assigned in WaterResource");
-        }
 #endif
 
         ToggleWaterAmountText(false);
+        CurrentAmount = StartingAmount;
     }
 
     public void DissovleWater(float amount)
     {
-        Amount -= amount;
+        CurrentAmount -= amount;
+
+        float scaleRation = CurrentAmount / StartingAmount;
+        Vector3 newScale = transform.localScale * scaleRation;
+        //scale down the object 
+        transform.DOScale(newScale, 0.5f);
     }
 
 
@@ -41,7 +45,7 @@ public class WaterResource : MonoBehaviour
     private void OnMouseOver()
     {
         ToggleWaterAmountText(true);
-        _waterAmountText.text = Amount.ToString();
+        _waterAmountText.text = CurrentAmount.ToString();
     }
 
     private void OnMouseExit()
