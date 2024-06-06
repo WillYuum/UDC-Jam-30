@@ -43,22 +43,12 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
                     waterResource.DissovleWater(1);
                 }
             }
-        }
-
-        CheckIfStillConnectToResouce();
-    }
 
 
-    private void CheckIfStillConnectToResouce()
-    {
-        foreach (var root in RootsConntectedToResouces)
-        {
-            if (!root.IsWaterColliding())
-            {
-                RootsConntectedToResouces.Remove(root);
-            }
+            root.RemoveResourcesIfOutOfRange();
         }
     }
+
 
 
 }

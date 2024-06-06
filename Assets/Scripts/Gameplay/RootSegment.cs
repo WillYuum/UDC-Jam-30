@@ -91,4 +91,19 @@ public class RootSegment : MonoBehaviour
         int waterLayerMask = 1 << 4;
         return Physics2D.BoxCastAll(startPosition, new Vector2(0.1f, distance), 0, direction, distance, waterLayerMask);
     }
+
+
+    public void RemoveResourcesIfOutOfRange()
+    {
+        var boxCast = CreateBoxCastCollider();
+
+        foreach (var item in boxCast)
+        {
+            bool inRange = LinkedResources.Contains(item.collider.GetComponent<WaterResource>());
+            if (!inRange)
+            {
+                LinkedResources.Remove(item.collider.GetComponent<WaterResource>());
+            }
+        }
+    }
 }
