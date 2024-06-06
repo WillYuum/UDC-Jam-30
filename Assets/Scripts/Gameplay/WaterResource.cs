@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WaterResource : MonoBehaviour
 {
-    [field: SerializeField] public float WaterAmount { get; private set; }
+    [field: SerializeField] public float Amount { get; private set; }
 
     [SerializeField] private TextMeshProUGUI _waterAmountText;
 
@@ -17,7 +17,7 @@ public class WaterResource : MonoBehaviour
         {
             Debug.LogError("WaterAmountText is not assigned in WaterResource");
         }
-        else if (WaterAmount <= 0)
+        else if (Amount <= 0)
         {
             Debug.LogError("WaterAmount is not assigned in WaterResource");
         }
@@ -28,8 +28,9 @@ public class WaterResource : MonoBehaviour
 
     public void DissovleWater(float amount)
     {
-        WaterAmount -= amount;
+        Amount -= amount;
     }
+
 
     private void ToggleWaterAmountText(bool isActive)
     {
@@ -40,7 +41,7 @@ public class WaterResource : MonoBehaviour
     private void OnMouseOver()
     {
         ToggleWaterAmountText(true);
-        _waterAmountText.text = WaterAmount.ToString();
+        _waterAmountText.text = Amount.ToString();
     }
 
     private void OnMouseExit()

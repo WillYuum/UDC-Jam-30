@@ -170,6 +170,50 @@ MonoBehaviour:
   _rootLineRenderer: {fileID: 580297026792146765, guid: c0687d4bea320c647a396ac95ad47c42, type: 3}
   _rootInteractablePrefab: {fileID: 318758243588165668, guid: fbf9c3d967528d8448c53d0b1debe941, type: 3}
   _renderLinesHolder: {fileID: 964000233}
+--- !u!1 &246078610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 246078611}
+  - component: {fileID: 246078612}
+  m_Layer: 0
+  m_Name: GameTicker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &246078611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246078610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.165807, y: -2.0994685, z: 0.47886747}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &246078612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246078610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2527a500f9068b24db92f5966df20fa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 964000234}
   m_Layer: 0
-  m_Name: Renderers
+  m_Name: Roots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -689,6 +733,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1246269376655068882, guid: c0687d4bea320c647a396ac95ad47c42, type: 3}
   m_PrefabInstance: {fileID: 1009174049}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1787000175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1787000177}
+  - component: {fileID: 1787000176}
+  m_Layer: 0
+  m_Name: CollectWaterObserver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1787000176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787000175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83108c23d123ea74b906f8bf88dd6a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1787000177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787000175}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.886578, y: -2.415567, z: 0.17527469}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3928198514367065403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -700,6 +788,10 @@ PrefabInstance:
     - target: {fileID: 1665912795394002187, guid: af184b250d67e6149b7b400fe07bc34b, type: 3}
       propertyPath: m_Name
       value: WaterResource
+      objectReference: {fileID: 0}
+    - target: {fileID: 1665912795394002187, guid: af184b250d67e6149b7b400fe07bc34b, type: 3}
+      propertyPath: m_Layer
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4938897463063099788, guid: af184b250d67e6149b7b400fe07bc34b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -741,6 +833,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7699470183253120661, guid: af184b250d67e6149b7b400fe07bc34b, type: 3}
+      propertyPath: <Amount>k__BackingField
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7699470183253120661, guid: af184b250d67e6149b7b400fe07bc34b, type: 3}
+      propertyPath: <WaterAmount>k__BackingField
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -757,3 +857,5 @@ SceneRoots:
   - {fileID: 1058038313}
   - {fileID: 964000234}
   - {fileID: 3928198514367065403}
+  - {fileID: 1787000177}
+  - {fileID: 246078611}

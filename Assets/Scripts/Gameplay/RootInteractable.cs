@@ -19,9 +19,4 @@ public class RootInteractable : MonoBehaviour
         _visual.color = Color.white;
     }
 
-    public RootSegment GetRootSegment()
-    {
-        GameObject parent = transform.parent.gameObject;
-        return parent.GetComponent<RootSegment>();
-    }
 }

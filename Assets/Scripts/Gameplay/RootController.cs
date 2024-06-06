@@ -35,7 +35,7 @@ public class RootController : MonoBehaviour
         {
             if (CheckIfClickedOnRootInteractable(mousePosition, out RootInteractable rootInteractable))
             {
-                StartNewSegment(mousePosition);
+                StartNewSegment(rootInteractable.transform.position);
             }
         }
         else if (Input.GetMouseButton(0) && _isDragging)
@@ -112,10 +112,18 @@ public class RootController : MonoBehaviour
             _isDragging = false;
             return;
         }
+
+        if (_spawnedRoot.IsWaterColliding(out WaterResource[] waterResources))
+        {
+            _spawnedRoot.AddResourceConnection(waterResources);
+            CollectWaterObserver.instance.ObserveRoot(_spawnedRoot);
+        }
+
         _spawnedRoot.SetEndPosition(mousePosition);
         _spawnedRoot.SetNodeConnection(Instantiate(_rootInteractablePrefab, mousePosition, Quaternion.identity).gameObject);
         _isDragging = false;
         _spawnedRoot = null;
     }
+
 
 }
