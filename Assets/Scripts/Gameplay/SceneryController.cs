@@ -10,6 +10,7 @@ public class SceneryController : MonoBehaviour
 
 
     [SerializeField] private SpriteRenderer _treeRender;
+    [SerializeField] private SpriteRenderer _backgroundRender;
 
     void Start()
     {
@@ -37,6 +38,7 @@ public class SceneryController : MonoBehaviour
         }
 
         _treeRender.sprite = sceneryAssets.TreeVisual;
+        _backgroundRender.sprite = sceneryAssets.BackgroundVisual;
     }
 
 
@@ -48,7 +50,8 @@ public class SceneryController : MonoBehaviour
 class SceneryAssets
 {
     [field: SerializeField] public Sprite TreeVisual { get; private set; }
-
+    [field: SerializeField] public Sprite BackgroundVisual { get; private set; }
 }
+
 
 
