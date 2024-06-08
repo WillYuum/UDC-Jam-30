@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,13 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
 
     [HideInInspector] public List<RootSegment> RootsConntectedToResouces { get; private set; } = new List<RootSegment>();
 
+    private GameloopManager gameloopManager;
+
     private void Awake()
     {
         GameTicker gameTicker = FindObjectOfType<GameTicker>();
         gameTicker.OnTick += HandleAbsorbWater;
+        gameloopManager = FindObjectOfType<GameloopManager>();
     }
 
     void Start()
@@ -33,14 +37,17 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
             return;
         }
 
-        foreach (var root in RootsConntectedToResouces)
+        float waterToDisolve = gameloopManager.TreeStats.WaterAbsorbtionRate;
+
+        foreach (RootSegment root in RootsConntectedToResouces)
         {
             WaterResource[] waterResources;
             if (root.IsWaterColliding(out waterResources))
             {
-                foreach (var waterResource in waterResources)
+                foreach (WaterResource waterResource in waterResources)
                 {
-                    waterResource.DissovleWater(1);
+                    gameloopManager.CollectWater();
+                    waterResource.DissovleWater(waterToDisolve);
                 }
             }
 
