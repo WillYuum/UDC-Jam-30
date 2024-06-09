@@ -14,7 +14,8 @@ public class GameloopManager : MonoBehaviour
 
     private GameTicker _gameTicker;
 
-    private float _durationTillDeath = 30f;
+    public float DurationTillDeath { get; } = 30f;
+    private float _deathCountdown = 0f;
     private bool _isInDeathState = false;
 
 
@@ -59,6 +60,17 @@ public class GameloopManager : MonoBehaviour
     void Update()
     {
         _gameUI.GameTimeText.text = _gameTicker.GameTime.ToString("F2");
+
+        if (_isInDeathState)
+        {
+            _deathCountdown += Time.deltaTime;
+            if (_deathCountdown >= DurationTillDeath)
+            {
+                //Enter Lose State
+                // _gameUI.LoseScreen.gameObject.SetActive(true);
+                HandleLoseGame();
+            }
+        }
     }
 
 
@@ -74,6 +86,13 @@ public class GameloopManager : MonoBehaviour
         _gameTicker.ToggleTicker(true);
     }
 
+
+    private void HandleLoseGame()
+    {
+        // GameUI gameUI = FindObjectOfType<GameUI>();
+        _gameUI.LoseScreen.gameObject.SetActive(true);
+        _gameTicker.ToggleTicker(false);
+    }
 
 
     public void CollectWater()
@@ -121,6 +140,7 @@ public class GameloopManager : MonoBehaviour
             if (TreeStats.EnergyLevel > 0)
             {
                 _isInDeathState = false;
+                _deathCountdown = 0.0f;
             }
 
             //Update countdown UI?

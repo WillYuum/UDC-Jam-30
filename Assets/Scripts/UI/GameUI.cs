@@ -13,6 +13,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] public LevelIndicators LevelIndicators;
     [SerializeField] public IntroScreen IntroScreen;
 
+    [SerializeField] public LoseScreen LoseScreen;
 
     [SerializeField] private GameObject _upgradeScreen;
     [SerializeField] private Button _buttonToUpgradeScreen;

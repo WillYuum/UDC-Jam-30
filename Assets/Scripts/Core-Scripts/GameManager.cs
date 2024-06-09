@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utils.GenericSingletons;
 
-public class GameManager : MonoBehaviourSingleton<MonoBehaviour>
+public class GameManager : MonoBehaviourSingleton<GameManager>
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public void RestartGame()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        Debug.Log("Restarting Game");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 }
 
