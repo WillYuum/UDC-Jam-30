@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -92,6 +93,27 @@ public class GameloopManager : MonoBehaviour
         _gameUI.GameTimeText.gameObject.SetActive(true);
         _gameUI.MainUI.SetActive(true);
         _gameTicker.ToggleTicker(true);
+
+        seasonTimer.OnSeasonChange += (season) =>
+        {
+            int CurrentLayer = 0;
+            switch (season)
+            {
+                case SeasonTimer.Season.Summer:
+                    CurrentLayer = 1;
+                    break;
+                case SeasonTimer.Season.Autumn:
+                    CurrentLayer = 2;
+                    break;
+                case SeasonTimer.Season.Winter:
+                    CurrentLayer = 4;
+                    break;
+            }
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Level", CurrentLayer);
+        };
+        string endGameEvent = "event:/Music";
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Level", 1);
+        FMODUnity.RuntimeManager.PlayOneShot(endGameEvent);
     }
 
 
