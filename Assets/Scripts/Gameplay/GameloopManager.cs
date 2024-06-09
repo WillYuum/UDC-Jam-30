@@ -56,16 +56,16 @@ public class GameloopManager : MonoBehaviour
     {
         _gameUI.GameTimeText.text = _gameTicker.GameTime.ToString("F2");
 
-        if (_isInDeathState)
-        {
-            _deathCountdown += Time.deltaTime;
-            if (_deathCountdown >= DurationTillDeath)
-            {
-                //Enter Lose State
-                // _gameUI.LoseScreen.gameObject.SetActive(true);
-                HandleLoseGame();
-            }
-        }
+        // if (_isInDeathState)
+        // {
+        //     _deathCountdown += Time.deltaTime;
+        //     if (_deathCountdown >= DurationTillDeath)
+        //     {
+        //Enter Lose State
+        // _gameUI.LoseScreen.gameObject.SetActive(true);
+        // HandleLoseGame();
+        //     }
+        // }
     }
 
     public void StartGame()
@@ -162,19 +162,24 @@ public class GameloopManager : MonoBehaviour
     {
         if (TreeStats.EnergyLevel <= 0)
         {
-            //Enter Death State
-            _isInDeathState = true;
+            HandleLoseGame();
         }
-        else if (_isInDeathState)
-        {
-            if (TreeStats.EnergyLevel > 0)
-            {
-                _isInDeathState = false;
-                _deathCountdown = 0.0f;
-            }
 
-            //Update countdown UI?
-        }
+        //     if (TreeStats.EnergyLevel <= 0)
+        //     {
+        //         //Enter Death State
+        //         _isInDeathState = true;
+        //     }
+        //     else if (_isInDeathState)
+        //     {
+        //         if (TreeStats.EnergyLevel > 0)
+        //         {
+        //             _isInDeathState = false;
+        //             _deathCountdown = 0.0f;
+        //         }
+
+        //         //Update countdown UI?
+        //     }
     }
 }
 
