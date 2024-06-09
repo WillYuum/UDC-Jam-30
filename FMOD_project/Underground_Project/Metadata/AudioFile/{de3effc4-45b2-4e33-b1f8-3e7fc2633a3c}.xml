@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{de3effc4-45b2-4e33-b1f8-3e7fc2633a3c}">
+		<property name="assetPath">
+			<value>UDC Jam - mix.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>158.40002267573695</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{5525ecf8-ce26-44df-a73d-30dc7302aebc}</destination>
+		</relationship>
+	</object>
+</objects>
