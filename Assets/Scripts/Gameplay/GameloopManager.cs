@@ -43,17 +43,11 @@ public class GameloopManager : MonoBehaviour
 
         _gameTicker.OnTick += InvokeLifeCycleEvents;
 
+        _gameTicker.ToggleTicker(false);
     }
 
     void Start()
     {
-        _gameTicker.ToggleTicker(false);
-
-        TreeStats.EnergyLevel = 50;
-        TreeStats.WaterLevel = 50;
-
-        StartGameIntro();
-
         _gameUI.GameTimeText.gameObject.SetActive(false);
     }
 
@@ -73,6 +67,11 @@ public class GameloopManager : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        StartGameIntro();
+    }
+
 
     private void StartGameIntro()
     {
@@ -81,6 +80,9 @@ public class GameloopManager : MonoBehaviour
 
     private void StartGameLoop()
     {
+        TreeStats.EnergyLevel = 50;
+        TreeStats.WaterLevel = 50;
+
         _gameUI.GameTimeText.gameObject.SetActive(true);
         _gameUI.MainUI.SetActive(true);
         _gameTicker.ToggleTicker(true);
