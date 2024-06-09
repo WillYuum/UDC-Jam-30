@@ -59,4 +59,9 @@ public class GameTicker : MonoBehaviour
         OnTick?.Invoke();
         _timeTillNextTick = IsFastMode ? _fastTickDuration : _normalTickDuration;
     }
+
+    public void ToggleTicker(bool active)
+    {
+        enabled = active;
+    }
 }

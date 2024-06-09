@@ -14,7 +14,7 @@ public class CameraControls : MonoBehaviour
     void Update()
     {
         Vector2 moveDirection = new Vector2(0.0f, Input.GetAxis("Vertical"));
-        Debug.Log(moveDirection);
+
         if (moveDirection.y > 0)
         {
             Vector3 newCameraPosition = transform.position + new Vector3(0, moveDirection.y, 0) * _moveSpeed;
