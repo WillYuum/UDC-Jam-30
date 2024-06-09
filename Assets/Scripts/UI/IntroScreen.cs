@@ -49,6 +49,10 @@ public class IntroScreen : MonoBehaviour
             text.DOFade(0, 1);
         }
 
-        _backgroundImage.DOFade(0, 1).SetDelay(1.5f).OnComplete(() => onEnd());
+        _backgroundImage.DOFade(0, 1).SetDelay(1.5f).OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+            onEnd();
+        });
     }
 }

@@ -37,7 +37,7 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
             return;
         }
 
-        float waterToDisolve = gameloopManager.TreeStats.WaterAbsorbtionRate;
+        float waterToDisolve = gameloopManager.TreeStats.WaterAbsorbtionRate.Value;
 
         foreach (RootSegment root in RootsConntectedToResouces)
         {

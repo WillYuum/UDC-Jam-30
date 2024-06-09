@@ -35,8 +35,8 @@ public class GameloopManager : MonoBehaviour
             CheckEnergyStatus();
 
 
-            _gameUI.LevelIndicators.UpdateEnergyLevel(TreeStats.EnergyLevel / TreeStats.MaxEnergyLevel, TreeStats.EnergyLevel);
-            _gameUI.LevelIndicators.UpdateWaterLevel(TreeStats.WaterLevel / TreeStats.MaxWaterLevel, TreeStats.WaterLevel);
+            _gameUI.LevelIndicators.UpdateEnergyLevel(TreeStats.EnergyLevel / TreeStats.MaxEnergyLevel.Value, TreeStats.EnergyLevel);
+            _gameUI.LevelIndicators.UpdateWaterLevel(TreeStats.WaterLevel / TreeStats.MaxWaterLevel.Value, TreeStats.WaterLevel);
         }
 
 
@@ -70,6 +70,7 @@ public class GameloopManager : MonoBehaviour
     private void StartGameLoop()
     {
         _gameUI.GameTimeText.gameObject.SetActive(true);
+        _gameUI.MainUI.SetActive(true);
         _gameTicker.ToggleTicker(true);
     }
 
@@ -83,7 +84,7 @@ public class GameloopManager : MonoBehaviour
             return;
         }
 
-        float collectedWater = TreeStats.WaterAbsorbtionRate;
+        float collectedWater = TreeStats.WaterAbsorbtionRate.Value;
         TreeStats.WaterLevel += collectedWater;
 
     }
@@ -95,8 +96,8 @@ public class GameloopManager : MonoBehaviour
             return;
         }
 
-        TreeStats.WaterLevel -= TreeStats.WaterAmountForEnergyConversion;
-        float waterToConvert = TreeStats.WaterAmountForEnergyConversion;
+        TreeStats.WaterLevel -= TreeStats.WaterAmountForEnergyConversion.Value;
+        float waterToConvert = TreeStats.WaterAmountForEnergyConversion.Value;
         float energyConverted = TreeStats.WaterToEnergyLogic.ConvertWaterToEnergy(waterToConvert);
         TreeStats.EnergyLevel += energyConverted;
     }
@@ -132,13 +133,13 @@ public class TreeStats
 {
     public float EnergyLevel { get; set; }
     public float WaterLevel { get; set; }
-    public float MaxEnergyLevel { get; set; }
-    public float MaxWaterLevel { get; set; }
+    public UpgradableAbility MaxEnergyLevel { get; set; }
+    public UpgradableAbility MaxWaterLevel { get; set; }
 
-    public float WaterAmountForEnergyConversion { get; set; }
+    public UpgradableAbility WaterAmountForEnergyConversion { get; set; }
     public WaterToEnergyLogic WaterToEnergyLogic { get; set; }
 
-    public float WaterAbsorbtionRate { get; set; }
+    public UpgradableAbility WaterAbsorbtionRate { get; set; }
 
 
     public TreeStats()
@@ -147,25 +148,34 @@ public class TreeStats
 
         EnergyLevel = 0;
         WaterLevel = 0;
-        MaxEnergyLevel = 100;
-        MaxWaterLevel = 100;
+        MaxEnergyLevel = new(AbilityType.MaxEnergyLevel, new(new float[] { 50, 100, 150 }));
+        MaxWaterLevel = new(AbilityType.MaxWaterLevel, new(new float[] { 100, 150, 200 }));
 
 
         WaterToEnergyLogic.UpdateWaterToEnergyRate(0.5f); //By Percentage
-        WaterAmountForEnergyConversion = 0.4f;
-        WaterAbsorbtionRate = 0.3f;
+        WaterAmountForEnergyConversion = new(AbilityType.WaterAmountForEnergyConversion, new(new float[] { 0.4f, 0.3f, 0.2f }));
+        WaterAbsorbtionRate = new(AbilityType.IncreaseWaterAbsortionRate, new(new float[] { 0.3f, 0.5f, 0.7f }));
     }
 
-    public bool SufficentWaterForEnergyConversion() => WaterLevel >= WaterAmountForEnergyConversion;
+    public bool SufficentWaterForEnergyConversion() => WaterLevel >= WaterAmountForEnergyConversion.Value;
 
-    public bool IsEnergyFull() => EnergyLevel >= MaxEnergyLevel;
+    public bool IsEnergyFull() => EnergyLevel >= MaxEnergyLevel.Value;
 
-    public bool IsWaterFull() => WaterLevel >= MaxWaterLevel;
+    public bool IsWaterFull() => WaterLevel >= MaxWaterLevel.Value;
 }
 
 public class WaterToEnergyLogic
 {
     private float _waterToEnergyRate;
+
+    public UpgradableAbility UpgradableAbility { get; set; }
+
+
+    public WaterToEnergyLogic()
+    {
+        UpgradableAbility = new(AbilityType.IncreaseWaterConversionRate, new(new float[] { 0.5f, 0.6f, 0.7f }));
+    }
+
     public float ConvertWaterToEnergy(float waterAmount)
     {
         return waterAmount * _waterToEnergyRate;
@@ -186,5 +196,82 @@ public class EnergyCostOfLiving
     [SerializeField] public float RootCost { get; private set; } = 0.2f;
     [SerializeField] public float JustLivingCost { get; private set; } = 0.3f;
 
+}
 
+
+
+
+public enum AbilityType
+{
+    MaxEnergyLevel,
+    MaxWaterLevel,
+    MaxRootLength,
+    IncreaseWaterAbsortionRate,
+    DecreaseLivingCost,
+    DecreaseUpgradeCost,
+    IncreaseWaterConversionRate,
+    WaterAmountForEnergyConversion,
+}
+
+public class UpgradableAbility
+{
+    public AbilityType Type { get; private set; }
+
+    private UpgradeData _data;
+
+    private float _baseUpgradeCost = 5f;
+
+    public UpgradableAbility(AbilityType type, UpgradeData data)
+    {
+        Type = type;
+        _data = data;
+    }
+
+    public float GetUpgradeCost() => _baseUpgradeCost * (_data.CurrentLevel + 1);
+
+    public float Value => _data.ValueLevels[_data.CurrentLevel];
+    public string GetUpgradeInfo() => _data.GetUpgradeInfo();
+
+    public void Upgrade()
+    {
+        _data.Upgrade();
+    }
+}
+
+
+
+public class UpgradeData
+{
+    public int CurrentLevel { get; private set; }
+    public float[] ValueLevels { get; private set; }
+
+
+    public UpgradeData(float[] valueLevels)
+    {
+        CurrentLevel = 0;
+        ValueLevels = valueLevels;
+    }
+
+    public void Upgrade()
+    {
+        if (IsMaxLevel())
+        {
+            Debug.Log("Max Level Reached");
+            return;
+        }
+
+        CurrentLevel++;
+    }
+
+    public bool IsMaxLevel() => CurrentLevel >= ValueLevels.Length - 1;
+
+    public string GetUpgradeInfo()
+    {
+        if (IsMaxLevel())
+        {
+            return "Max Level: " + ValueLevels[CurrentLevel].ToString();
+        }
+
+        return ValueLevels[CurrentLevel].ToString() + "->" + ValueLevels[CurrentLevel + 1].ToString();
+    }
 }
