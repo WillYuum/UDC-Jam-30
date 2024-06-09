@@ -80,8 +80,9 @@ public class GameloopManager : MonoBehaviour
 
     private void StartGameLoop()
     {
-        TreeStats.EnergyLevel = 50;
-        TreeStats.WaterLevel = 50;
+        TreeStats.EnergyLevel = TreeStats.MaxEnergyLevel.Value * 0.5f;
+        TreeStats.WaterLevel = TreeStats.MaxWaterLevel.Value * 0.1f;
+
         SeasonTimer seasonTimer = FindObjectOfType<SeasonTimer>();
         seasonTimer.StartSeasonTimer();
 
