@@ -39,6 +39,9 @@ public class GameUI : MonoBehaviour
     {
         GameloopManager gameloopManager = FindObjectOfType<GameloopManager>();
 
+
+        bool CanUpgrade(float cost) => gameloopManager.TreeStats.EnergyLevel >= cost;
+
         TreeStats treeStats = gameloopManager.TreeStats;
         DisplayUpgradeUICards(new UpgradeUI.UpgradeInfo[] {
                 new() {
@@ -47,8 +50,10 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.MaxEnergyLevel.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-
-                        treeStats.MaxEnergyLevel.Upgrade();
+                        if(CanUpgrade(treeStats.MaxEnergyLevel.GetUpgradeCost())){
+                        treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
+                            treeStats.MaxEnergyLevel.Upgrade();
+                        }
                     },
 
                 },
@@ -59,7 +64,9 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.MaxWaterLevel.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-                        treeStats.MaxWaterLevel.Upgrade();
+                        if(CanUpgrade(treeStats.MaxWaterLevel.GetUpgradeCost()))
+                        treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
+                            treeStats.MaxWaterLevel.Upgrade();
                     }
                 },
                 new()
@@ -69,7 +76,9 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-                        treeStats.WaterToEnergyLogic.UpgradableAbility.Upgrade();
+                        if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost()))
+                        treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
+                            treeStats.WaterToEnergyLogic.UpgradableAbility.Upgrade();
                     }
                 }
 
