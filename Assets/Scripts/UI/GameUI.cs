@@ -13,6 +13,7 @@ public class GameUI : MonoBehaviour
 
     public void PlayGameIntro(Action onEnd)
     {
+        IntroScreen.gameObject.SetActive(true);
         IntroScreen.FadeInScreen(onEnd);
     }
 }

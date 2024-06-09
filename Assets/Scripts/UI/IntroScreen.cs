@@ -14,6 +14,7 @@ public class IntroScreen : MonoBehaviour
 
     void Awake()
     {
+        _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, 0);
         foreach (TextMeshProUGUI text in _allTexts)
         {
             text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
@@ -23,6 +24,8 @@ public class IntroScreen : MonoBehaviour
 
     public void FadeInScreen(Action OnEnd)
     {
+        _backgroundImage.DOFade(1, 1).SetDelay(0.75f);
+
         //sequentially fade in all texts with delay of 1.5 seconds
         for (int i = 0; i < _allTexts.Length; i++)
         {
