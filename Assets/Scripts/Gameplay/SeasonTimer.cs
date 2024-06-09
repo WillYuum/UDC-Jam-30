@@ -13,17 +13,18 @@ public class SeasonTimer : MonoBehaviour
     public Season CurrentSeason { get; private set; } = Season.Summer;
 
     private float _timeTillNextSeason;
-    [SerializeField] private float _summerDurationInSeconds = 90f; // 1.5 minutes
-    [SerializeField] private float _autumnDurationInSeconds = 60f; // 1 minute
-    [SerializeField] private float _winterDurationInSeconds = 60f; // 1 minute
+    [SerializeField] private float _summerDurationInSeconds = 90f;
+    [SerializeField] private float _autumnDurationInSeconds = 180f;
+    [SerializeField] private float _winterDurationInSeconds = 220f;
 
     public event Action<Season> OnSeasonChange;
 
     private GameTicker _gameTicker;
 
-    void Start()
+
+    public void StartSeasonTimer()
     {
-        _timeTillNextSeason = _summerDurationInSeconds;
+        _timeTillNextSeason = _autumnDurationInSeconds;
         _gameTicker = FindObjectOfType<GameTicker>();
 
         if (_gameTicker != null)
@@ -38,9 +39,16 @@ public class SeasonTimer : MonoBehaviour
 
     private void HandleTick()
     {
-        // Adjust the decrement based on whether the game ticker is in fast mode
-        float tickDuration = _gameTicker.IsFastMode ? _gameTicker.FastForwardMultiplier : 1f;
-        _timeTillNextSeason -= tickDuration;
+        if (_gameTicker.IsFastMode)
+        {
+            // When in fast mode, adjust season timer based on fast forward multiplier
+            _timeTillNextSeason -= _gameTicker.FastForwardMultiplier * _gameTicker.TickDuration;
+        }
+        else
+        {
+            // Otherwise, decrement based on regular tick duration
+            _timeTillNextSeason -= _gameTicker.TickDuration;
+        }
 
         if (_timeTillNextSeason <= 0)
         {
@@ -75,5 +83,18 @@ public class SeasonTimer : MonoBehaviour
         {
             _gameTicker.OnTick -= HandleTick;
         }
+    }
+}
+
+
+public class SeasonData
+{
+    public SeasonTimer.Season season;
+    public float durationInSeconds;
+
+    public SeasonData(SeasonTimer.Season season, float durationInSeconds)
+    {
+        this.season = season;
+        this.durationInSeconds = durationInSeconds;
     }
 }

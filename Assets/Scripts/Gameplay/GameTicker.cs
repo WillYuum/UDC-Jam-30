@@ -3,17 +3,20 @@ using UnityEngine;
 
 public class GameTicker : MonoBehaviour
 {
-    private int _tickRatePerSecond = 1;
-    private float _timeTillNextTick;
-    public bool IsFastMode = false;
-    private float _normalTickDuration;
-    private float _fastTickDuration;
-
+    [SerializeField] private int _tickRatePerSecond = 1;
     [HideInInspector] public float GameTime { get; private set; }
 
     [field: SerializeField] public float FastForwardMultiplier { get; private set; } = 2f;
 
     public event Action OnTick;
+
+    private float _normalTickDuration;
+    private float _fastTickDuration;
+    private float _timeTillNextTick;
+
+    public bool IsFastMode { get; private set; } = false;
+
+    public float TickDuration => IsFastMode ? _fastTickDuration : _normalTickDuration;
 
     void Start()
     {
@@ -26,23 +29,7 @@ public class GameTicker : MonoBehaviour
 
     void Update()
     {
-        // Check if the "E" key is being held down
-        if (Input.GetKey(KeyCode.E))
-        {
-            if (!IsFastMode)
-            {
-                IsFastMode = true;
-                _timeTillNextTick = _fastTickDuration;
-            }
-        }
-        else
-        {
-            if (IsFastMode)
-            {
-                IsFastMode = false;
-                _timeTillNextTick = _normalTickDuration;
-            }
-        }
+        HandleModeSwitch();
 
         _timeTillNextTick -= Time.deltaTime;
 
@@ -52,6 +39,30 @@ public class GameTicker : MonoBehaviour
         }
 
         GameTime += IsFastMode ? Time.deltaTime * FastForwardMultiplier : Time.deltaTime;
+    }
+
+    private void HandleModeSwitch()
+    {
+        if (Input.GetKey(KeyCode.E))
+        {
+            if (!IsFastMode)
+            {
+                SetFastMode(true);
+            }
+        }
+        else
+        {
+            if (IsFastMode)
+            {
+                SetFastMode(false);
+            }
+        }
+    }
+
+    private void SetFastMode(bool isFast)
+    {
+        IsFastMode = isFast;
+        _timeTillNextTick = IsFastMode ? _fastTickDuration : _normalTickDuration;
     }
 
     private void InvokeTick()

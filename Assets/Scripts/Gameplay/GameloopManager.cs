@@ -82,6 +82,8 @@ public class GameloopManager : MonoBehaviour
     {
         TreeStats.EnergyLevel = 50;
         TreeStats.WaterLevel = 50;
+        SeasonTimer seasonTimer = FindObjectOfType<SeasonTimer>();
+        seasonTimer.StartSeasonTimer();
 
         RootController rootController = FindObjectOfType<RootController>();
         rootController.UpdateRootInteractables();
