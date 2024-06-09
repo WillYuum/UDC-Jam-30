@@ -296,6 +296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rootLineRenderer: {fileID: 580297026792146765, guid: c0687d4bea320c647a396ac95ad47c42, type: 3}
   _rootInteractablePrefab: {fileID: 318758243588165668, guid: fbf9c3d967528d8448c53d0b1debe941, type: 3}
+  _rootInteractableHolder: {fileID: 1402102914}
   _renderLinesHolder: {fileID: 964000233}
 --- !u!1 &21403697
 GameObject:
@@ -1549,7 +1550,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 000000006db70581
+  m_ApplyToSortingLayers: 000000006db705812dd2b54b
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -3213,6 +3214,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348841310}
   m_CullTransparentMesh: 1
+--- !u!1 &1402102913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1402102914}
+  m_Layer: 0
+  m_Name: RootInteractablesHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1402102914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402102913}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1423551668 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 144301960260859883, guid: 726abe362fa1e3d4a85b54af37eed623, type: 3}
@@ -4278,14 +4310,15 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1580442240}
   - {fileID: 619394802}
-  - {fileID: 8787169}
+  - {fileID: 1138153030}
   - {fileID: 1336215175}
-  - {fileID: 1058038313}
+  - {fileID: 8787169}
   - {fileID: 964000234}
+  - {fileID: 1402102914}
   - {fileID: 3928198514367065403}
   - {fileID: 1787000177}
   - {fileID: 246078611}
   - {fileID: 1630636187}
   - {fileID: 1274440712}
   - {fileID: 5208164}
-  - {fileID: 1138153030}
+  - {fileID: 1058038313}

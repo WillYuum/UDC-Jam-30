@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RootController : MonoBehaviour
@@ -11,18 +12,9 @@ public class RootController : MonoBehaviour
     private RootSegment _spawnedRoot;
 
     [SerializeField] private RootInteractable _rootInteractablePrefab;
+    [SerializeField] private Transform _rootInteractableHolder;
     [SerializeField] private GameObject _renderLinesHolder;
 
-    void Start()
-    {
-        RootSegment[] rootSegments = _renderLinesHolder.GetComponentsInChildren<RootSegment>();
-
-        foreach (RootSegment rootSegment in rootSegments)
-        {
-            Instantiate(_rootInteractablePrefab, rootSegment.GetEndPosition(), Quaternion.identity);
-            // rootSegment.SetEndPosition(rootSegment.transform.position);
-        }
-    }
 
 
     void Update()
@@ -45,6 +37,24 @@ public class RootController : MonoBehaviour
         else if (Input.GetMouseButtonUp(0) && _isDragging)
         {
             EndCreateRootSegment(mousePosition);
+        }
+    }
+
+    public void UpdateRootInteractables()
+    {
+        //Destroy all root interactables
+        foreach (Transform child in _rootInteractableHolder)
+        {
+            Destroy(child.gameObject);
+        }
+
+        //add new root interactables
+        RootSegment[] rootSegments = _renderLinesHolder.GetComponentsInChildren<RootSegment>();
+
+        foreach (RootSegment rootSegment in rootSegments)
+        {
+            Instantiate(_rootInteractablePrefab, rootSegment.GetEndPosition(), Quaternion.identity);
+            // rootSegment.SetEndPosition(rootSegment.transform.position);
         }
     }
 

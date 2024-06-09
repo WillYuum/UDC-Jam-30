@@ -83,6 +83,9 @@ public class GameloopManager : MonoBehaviour
         TreeStats.EnergyLevel = 50;
         TreeStats.WaterLevel = 50;
 
+        RootController rootController = FindObjectOfType<RootController>();
+        rootController.UpdateRootInteractables();
+
         _gameUI.GameTimeText.gameObject.SetActive(true);
         _gameUI.MainUI.SetActive(true);
         _gameTicker.ToggleTicker(true);
