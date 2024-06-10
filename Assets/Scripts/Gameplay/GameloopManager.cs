@@ -114,6 +114,35 @@ public class GameloopManager : MonoBehaviour
         string endGameEvent = "event:/Music";
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Level", 1);
         FMODUnity.RuntimeManager.PlayOneShot(endGameEvent);
+
+
+        SetupListentingToEndGame();
+    }
+
+
+    private void SetupListentingToEndGame()
+    {
+        SeasonTimer seasonTimer = FindObjectOfType<SeasonTimer>();
+        seasonTimer.OnSeasonChange += (season) =>
+        {
+            switch (season)
+            {
+                case SeasonTimer.Season.Summer:
+                    WinGame();
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+
+
+    private void WinGame()
+    {
+        // GameUI gameUI = FindObjectOfType<GameUI>();
+        // _gameUI.WinScreen.gameObject.SetActive(true);
+        _gameUI.WinScreen.PlayWinScreen();
+        _gameTicker.ToggleTicker(false);
     }
 
 

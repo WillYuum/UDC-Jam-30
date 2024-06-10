@@ -14,6 +14,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] public IntroScreen IntroScreen;
 
     [SerializeField] public LoseScreen LoseScreen;
+    [SerializeField] public WinScreen WinScreen;
 
     [SerializeField] private GameObject _upgradeScreen;
     [SerializeField] private Button _buttonToUpgradeScreen;
