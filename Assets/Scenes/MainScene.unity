@@ -245,7 +245,7 @@ MonoBehaviour:
   GameTimeText: {fileID: 21403699}
   LevelIndicators: {fileID: 899408620}
   IntroScreen: {fileID: 513055516}
-  LoseScreen: {fileID: 0}
+  LoseScreen: {fileID: 2068811450}
   _upgradeScreen: {fileID: 1888865931}
   _buttonToUpgradeScreen: {fileID: 1318719491}
   _upgradeUIPrefab: {fileID: 4375208591145037913, guid: 726abe362fa1e3d4a85b54af37eed623, type: 3}
