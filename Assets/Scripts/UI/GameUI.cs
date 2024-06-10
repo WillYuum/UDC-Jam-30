@@ -42,6 +42,13 @@ public class GameUI : MonoBehaviour
 
         bool CanUpgrade(float cost) => gameloopManager.TreeStats.EnergyLevel >= cost;
 
+        void UpdateLevelIndicators()
+        {
+            TreeStats treeStats = gameloopManager.TreeStats;
+            LevelIndicators.UpdateEnergyLevel(treeStats.EnergyLevel / treeStats.MaxEnergyLevel.Value, treeStats.EnergyLevel);
+            LevelIndicators.UpdateWaterLevel(treeStats.WaterLevel / treeStats.MaxWaterLevel.Value, treeStats.WaterLevel);
+        }
+
         TreeStats treeStats = gameloopManager.TreeStats;
         DisplayUpgradeUICards(new UpgradeUI.UpgradeInfo[] {
                 new() {
@@ -53,6 +60,7 @@ public class GameUI : MonoBehaviour
                         if(CanUpgrade(treeStats.MaxEnergyLevel.GetUpgradeCost())){
                         treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
                             treeStats.MaxEnergyLevel.Upgrade();
+                            UpdateLevelIndicators();
                         }
                     },
 
@@ -67,6 +75,7 @@ public class GameUI : MonoBehaviour
                         if(CanUpgrade(treeStats.MaxWaterLevel.GetUpgradeCost()))
                         treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
                             treeStats.MaxWaterLevel.Upgrade();
+                            UpdateLevelIndicators();
                     }
                 },
                 new()
@@ -79,6 +88,7 @@ public class GameUI : MonoBehaviour
                         if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost()))
                         treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
                             treeStats.WaterToEnergyLogic.UpgradableAbility.Upgrade();
+                            UpdateLevelIndicators();
                     }
                 }
 
