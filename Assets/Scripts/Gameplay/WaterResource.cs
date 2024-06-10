@@ -25,7 +25,12 @@ public class WaterResource : MonoBehaviour
         CurrentAmount = StartingAmount;
     }
 
-    public void DissovleWater(float amount)
+    private bool IsEmpty()
+    {
+        return CurrentAmount < 1.0;
+    }
+
+    public bool DissovleWater(float amount)
     {
         CurrentAmount -= amount;
 
@@ -33,6 +38,15 @@ public class WaterResource : MonoBehaviour
         Vector3 newScale = transform.localScale * scaleRation;
         //scale down the object 
         transform.DOScale(newScale, 0.5f);
+
+        bool isEmpty = IsEmpty();
+
+        if (isEmpty)
+        {
+            Destroy(gameObject);
+        }
+
+        return isEmpty;
     }
 
 

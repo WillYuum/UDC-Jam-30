@@ -18,12 +18,6 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
         gameloopManager = FindObjectOfType<GameloopManager>();
     }
 
-    void Start()
-    {
-        // AvailableWaterResources = new List<WaterResource>(FindObjectsOfType<WaterResource>(false));
-    }
-
-
     public void ObserveRoot(RootSegment rootSegment)
     {
         RootsConntectedToResouces.Add(rootSegment);
@@ -39,20 +33,36 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
 
         float waterToDisolve = gameloopManager.TreeStats.WaterAbsorbtionRate.Value;
 
-        foreach (RootSegment root in RootsConntectedToResouces)
+        RootSegment[] rootToLoop = RootsConntectedToResouces.ToArray();
+        foreach (RootSegment root in rootToLoop)
         {
-            WaterResource[] waterResources;
-            if (root.IsWaterColliding(out waterResources))
+
+            WaterResource[] waterResources = root.LinkedResources.ToArray();
+            foreach (WaterResource waterResource in waterResources)
             {
-                foreach (WaterResource waterResource in waterResources)
+                gameloopManager.CollectWater();
+                bool isEmpty = waterResource.DissovleWater(waterToDisolve);
+
+                if (isEmpty)
                 {
-                    gameloopManager.CollectWater();
-                    waterResource.DissovleWater(waterToDisolve);
+                    root.LinkedResources.Remove(waterResource);
                 }
             }
 
+            RemoveRootWithoutResources();
 
             root.RemoveResourcesIfOutOfRange();
+        }
+    }
+
+    private void RemoveRootWithoutResources()
+    {
+        for (int i = 0; i < RootsConntectedToResouces.Count; i++)
+        {
+            if (RootsConntectedToResouces[i].LinkedResources.Count == 0)
+            {
+                RootsConntectedToResouces.RemoveAt(i);
+            }
         }
     }
 
