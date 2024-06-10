@@ -13,6 +13,8 @@ public class GameloopManager : MonoBehaviour
     [SerializeField] public TreeStats TreeStats { get; private set; }
     [SerializeField] public EnergyCostOfLiving EnergyCostOfLiving { get; private set; }
 
+    private RootController _rooController;
+
     private GameTicker _gameTicker;
 
     public float DurationTillDeath { get; } = 30f;
@@ -28,11 +30,13 @@ public class GameloopManager : MonoBehaviour
         TreeStats = new TreeStats();
         EnergyCostOfLiving = new EnergyCostOfLiving();
 
+        _rooController = FindObjectOfType<RootController>();
+
 
         void InvokeLifeCycleEvents()
         {
             ConvertWaterToEnergy();
-            ConusmeCostOfLiving();
+            ConsumeCostOfLiving();
 
             CheckEnergyStatus();
 
@@ -87,8 +91,7 @@ public class GameloopManager : MonoBehaviour
         SeasonTimer seasonTimer = FindObjectOfType<SeasonTimer>();
         seasonTimer.StartSeasonTimer();
 
-        RootController rootController = FindObjectOfType<RootController>();
-        rootController.UpdateRootInteractables();
+        _rooController.UpdateRootInteractables();
 
         _gameUI.GameTimeText.gameObject.SetActive(true);
         _gameUI.MainUI.SetActive(true);
@@ -180,9 +183,9 @@ public class GameloopManager : MonoBehaviour
         TreeStats.EnergyLevel += energyConverted;
     }
 
-    private void ConusmeCostOfLiving()
+    private void ConsumeCostOfLiving()
     {
-        TreeStats.EnergyLevel -= EnergyCostOfLiving.JustLivingCost;
+        TreeStats.EnergyLevel -= EnergyCostOfLiving.JustLivingCost * _rooController.RootCount;
         TreeStats.WaterLevel -= EnergyCostOfLiving.RootCost;
     }
 

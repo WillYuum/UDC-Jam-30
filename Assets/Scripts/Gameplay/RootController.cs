@@ -7,6 +7,8 @@ public class RootController : MonoBehaviour
     private float _maxSegmentLength = 1.5f;
 
 
+    public int RootCount { get; private set; } = 0;
+
     private Vector2 _startPosition;
     private bool _isDragging = false;
     private RootSegment _spawnedRoot;
@@ -133,6 +135,9 @@ public class RootController : MonoBehaviour
         _spawnedRoot.SetNodeConnection(Instantiate(_rootInteractablePrefab, mousePosition, Quaternion.identity).gameObject);
         _isDragging = false;
         _spawnedRoot = null;
+
+
+        RootCount += 1;
     }
 
 
