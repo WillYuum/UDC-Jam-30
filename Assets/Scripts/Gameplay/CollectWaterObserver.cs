@@ -7,12 +7,14 @@ using Utils.GenericSingletons;
 public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
 {
 
-    [HideInInspector] public List<RootSegment> RootsConntectedToResouces { get; private set; } = new List<RootSegment>();
+    [HideInInspector] public List<RootSegment> RootsConntectedToResouces { get; private set; }
 
     private GameloopManager gameloopManager;
 
     private void Awake()
     {
+        RootsConntectedToResouces = new List<RootSegment>();
+
         GameTicker gameTicker = FindObjectOfType<GameTicker>();
         gameTicker.OnTick += HandleAbsorbWater;
         gameloopManager = FindObjectOfType<GameloopManager>();
@@ -49,20 +51,17 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
                 }
             }
 
-            RemoveRootWithoutResources();
+            RemoveRootWithoutResources(root);
 
             root.RemoveResourcesIfOutOfRange();
         }
     }
 
-    private void RemoveRootWithoutResources()
+    private void RemoveRootWithoutResources(RootSegment rootSegment)
     {
-        for (int i = 0; i < RootsConntectedToResouces.Count; i++)
+        if (rootSegment.LinkedResources.Count == 0)
         {
-            if (RootsConntectedToResouces[i].LinkedResources.Count == 0)
-            {
-                RootsConntectedToResouces.RemoveAt(i);
-            }
+            RootsConntectedToResouces.Remove(rootSegment);
         }
     }
 

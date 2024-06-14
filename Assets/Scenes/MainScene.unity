@@ -247,7 +247,7 @@ MonoBehaviour:
   LevelIndicators: {fileID: 899408620}
   IntroScreen: {fileID: 513055516}
   LoseScreen: {fileID: 2068811450}
-  WinScreen: {fileID: 0}
+  WinScreen: {fileID: 1787705278}
   _upgradeScreen: {fileID: 1888865931}
   _buttonToUpgradeScreen: {fileID: 1318719491}
   _upgradeUIPrefab: {fileID: 4375208591145037913, guid: 726abe362fa1e3d4a85b54af37eed623, type: 3}
@@ -300,6 +300,7 @@ MonoBehaviour:
   _rootInteractablePrefab: {fileID: 318758243588165668, guid: fbf9c3d967528d8448c53d0b1debe941, type: 3}
   _rootInteractableHolder: {fileID: 1402102914}
   _renderLinesHolder: {fileID: 964000233}
+  MaxYRootSpawnPoint: {fileID: 378153391}
 --- !u!1 &21403697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,6 +1056,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304425204}
   m_CullTransparentMesh: 1
+--- !u!1 &378153390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 378153391}
+  m_Layer: 0
+  m_Name: MaxYRootSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &378153391
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378153390}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &428525216
 GameObject:
   m_ObjectHideFlags: 0
@@ -5474,6 +5506,7 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 1138153030}
   - {fileID: 1336215175}
+  - {fileID: 378153391}
   - {fileID: 8787169}
   - {fileID: 964000234}
   - {fileID: 1402102914}
