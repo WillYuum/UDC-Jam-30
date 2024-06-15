@@ -60,16 +60,15 @@ public class GameloopManager : MonoBehaviour
     {
         _gameUI.GameTimeText.text = _gameTicker.GameTime.ToString("F2");
 
-        // if (_isInDeathState)
-        // {
-        //     _deathCountdown += Time.deltaTime;
-        //     if (_deathCountdown >= DurationTillDeath)
-        //     {
-        //Enter Lose State
-        // _gameUI.LoseScreen.gameObject.SetActive(true);
-        // HandleLoseGame();
-        //     }
-        // }
+        if (_isInDeathState)
+        {
+            _deathCountdown += Time.deltaTime;
+            if (_deathCountdown >= DurationTillDeath)
+            {
+                _gameUI.DeathCountDownController.UpdateDeathCountdown(_deathCountdown);
+
+            }
+        }
     }
 
     public void StartGame()
@@ -85,8 +84,10 @@ public class GameloopManager : MonoBehaviour
 
     private void StartGameLoop()
     {
-        TreeStats.EnergyLevel = TreeStats.MaxEnergyLevel.Value * 0.5f;
-        TreeStats.WaterLevel = TreeStats.MaxWaterLevel.Value * 0.1f;
+        TreeStats.EnergyLevel = TreeStats.MaxEnergyLevel.Value * 0.02f;
+        TreeStats.WaterLevel = TreeStats.MaxWaterLevel.Value * 0.0f;
+
+        _gameUI.DeathCountDownController.ToggleDeathCountdown(false);
 
         SeasonTimer seasonTimer = FindObjectOfType<SeasonTimer>();
         seasonTimer.StartSeasonTimer();
@@ -151,6 +152,8 @@ public class GameloopManager : MonoBehaviour
 
     private void HandleLoseGame()
     {
+        Debug.Log("|Game Loop| Lose Game Triggered");
+
         // GameUI gameUI = FindObjectOfType<GameUI>();
         _gameUI.LoseScreen.gameObject.SetActive(true);
         _gameTicker.ToggleTicker(false);
@@ -192,27 +195,32 @@ public class GameloopManager : MonoBehaviour
 
     private void CheckEnergyStatus()
     {
-        if (TreeStats.EnergyLevel <= 0)
+        switch (_isInDeathState)
         {
-            HandleLoseGame();
+            case true:
+                if (TreeStats.EnergyLevel > 0)
+                {
+                    _isInDeathState = false;
+                    _deathCountdown = DurationTillDeath;
+                    _gameUI.DeathCountDownController.ToggleDeathCountdown(false);
+                    _gameUI.DeathCountDownController.UpdateDeathCountdown(0.0f);
+                }
+                else if (_deathCountdown >= DurationTillDeath)
+                {
+                    HandleLoseGame();
+                }
+                break;
+            case false:
+                if (TreeStats.EnergyLevel <= 0)
+                {
+                    _isInDeathState = true;
+                    _gameUI.DeathCountDownController.UpdateDeathCountdown(0.0f);
+                    _gameUI.DeathCountDownController.ToggleDeathCountdown(true);
+                }
+                break;
         }
-
-        //     if (TreeStats.EnergyLevel <= 0)
-        //     {
-        //         //Enter Death State
-        //         _isInDeathState = true;
-        //     }
-        //     else if (_isInDeathState)
-        //     {
-        //         if (TreeStats.EnergyLevel > 0)
-        //         {
-        //             _isInDeathState = false;
-        //             _deathCountdown = 0.0f;
-        //         }
-
-        //         //Update countdown UI?
-        //     }
     }
+
 }
 
 

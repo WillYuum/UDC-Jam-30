@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameUI : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class GameUI : MonoBehaviour
 
     [SerializeField] private GameObject _upgradeScreen;
     [SerializeField] private Button _buttonToUpgradeScreen;
+
+    [field: SerializeField] public DeathCountDownController DeathCountDownController { get; private set; }
 
 
 
@@ -124,6 +127,51 @@ public class GameUI : MonoBehaviour
             {
                 upgradeInfo.OnClicked();
                 GetDataAndRenderUpgrades();
+            });
+        }
+    }
+
+}
+
+
+
+[System.Serializable]
+public class DeathCountDownController
+{
+    [field: SerializeField] public TextMeshProUGUI DeathCountdownText { get; private set; }
+    [field: SerializeField] public GameObject Holder { get; private set; }
+
+
+    public void UpdateDeathCountdown(float countdown)
+    {
+        DeathCountdownText.text = countdown.ToString("F2");
+    }
+
+    public void ToggleDeathCountdown(bool value, bool tween = false)
+    {
+        Holder.SetActive(value);
+
+        if (value)
+        {
+            RectTransform rectTransform = Holder.GetComponent<RectTransform>();
+
+            Vector3 originalPosition = rectTransform.anchoredPosition;
+
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+
+
+            rectTransform.anchoredPosition = new Vector3(originalPosition.x, 0, originalPosition.z);
+            rectTransform.localScale = new Vector3(0, 0, 0);
+            rectTransform.DOScale(1, 1.5f).OnComplete(() =>
+            {
+                rectTransform.anchorMax = new Vector2(0.5f, 1.0f);
+                rectTransform.anchorMin = new Vector2(0.5f, 1.0f);
+                rectTransform.anchoredPosition = new Vector3(originalPosition.x, -Screen.height / 2, originalPosition.z);
+                rectTransform.DOAnchorPosY(-11, 0.75f).SetDelay(0.15f).OnComplete(() =>
+                {
+                    rectTransform.anchoredPosition = originalPosition;
+                });
             });
         }
     }
