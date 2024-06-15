@@ -244,7 +244,7 @@ public class TreeStats
         WaterAbsorbtionRate = new(AbilityType.IncreaseWaterAbsortionRate, new(new float[] { 0.3f, 0.5f, 0.7f }));
     }
 
-    public bool SufficentWaterForEnergyConversion() => WaterLevel >= WaterAmountForEnergyConversion.Value;
+    public bool SufficentWaterForEnergyConversion() => WaterLevel > 0;
 
     public bool IsEnergyFull() => EnergyLevel >= MaxEnergyLevel.Value;
 
