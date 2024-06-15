@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 public class RootController : MonoBehaviour
@@ -16,6 +16,8 @@ public class RootController : MonoBehaviour
     [SerializeField] private RootInteractable _rootInteractablePrefab;
     [SerializeField] private Transform _rootInteractableHolder;
     [SerializeField] private GameObject _renderLinesHolder;
+
+    [SerializeField] private Transform MaxYRootSpawnPoint;
 
 
 
@@ -98,6 +100,8 @@ public class RootController : MonoBehaviour
         {
             currentMousePosition = _startPosition + direction.normalized * _maxSegmentLength;
         }
+
+        currentMousePosition.y = Math.Min(currentMousePosition.y, MaxYRootSpawnPoint.position.y);
 
         _spawnedRoot.UpdateEndPosition(currentMousePosition);
     }
