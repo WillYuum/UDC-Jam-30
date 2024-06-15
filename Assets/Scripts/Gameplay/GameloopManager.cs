@@ -157,17 +157,17 @@ public class GameloopManager : MonoBehaviour
     }
 
 
-    public void CollectWater()
+    public bool CollectWater()
     {
 
         if (TreeStats.IsWaterFull())
         {
-            return;
+            return false;
         }
 
         float collectedWater = TreeStats.WaterAbsorbtionRate.Value;
         TreeStats.WaterLevel += collectedWater;
-
+        return true;
     }
 
     private void ConvertWaterToEnergy()
