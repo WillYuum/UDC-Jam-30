@@ -36,7 +36,7 @@ public class GameloopManager : MonoBehaviour
         void InvokeLifeCycleEvents()
         {
             ConvertWaterToEnergy();
-            ConsumeCostOfLiving();
+            ConsumeEnergyCostOfLiving();
 
             CheckEnergyStatus();
 
@@ -183,10 +183,10 @@ public class GameloopManager : MonoBehaviour
         TreeStats.EnergyLevel += energyConverted;
     }
 
-    private void ConsumeCostOfLiving()
+    private void ConsumeEnergyCostOfLiving()
     {
         TreeStats.EnergyLevel -= EnergyCostOfLiving.JustLivingCost * _rooController.RootCount;
-        TreeStats.WaterLevel -= EnergyCostOfLiving.RootCost;
+        TreeStats.EnergyLevel -= EnergyCostOfLiving.RootCost;
     }
 
 
