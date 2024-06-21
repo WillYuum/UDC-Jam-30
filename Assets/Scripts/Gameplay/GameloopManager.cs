@@ -84,7 +84,7 @@ public class GameloopManager : MonoBehaviour
 
     private void StartGameLoop()
     {
-        TreeStats.EnergyLevel = TreeStats.MaxEnergyLevel.Value * 0.02f;
+        TreeStats.EnergyLevel = TreeStats.MaxEnergyLevel.Value * 0.5f;
         TreeStats.WaterLevel = TreeStats.MaxWaterLevel.Value * 0.0f;
 
         _gameUI.DeathCountDownController.ToggleDeathCountdown(false);
