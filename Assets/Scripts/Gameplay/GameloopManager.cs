@@ -40,9 +40,11 @@ public class GameloopManager : MonoBehaviour
 
             CheckEnergyStatus();
 
+            float energyLevelVal = TreeStats.EnergyLevel.Value;
+            float waterLevelVal = TreeStats.WaterLevel.Value;
 
-            _gameUI.LevelIndicators.UpdateEnergyLevel(TreeStats.EnergyLevel / TreeStats.MaxEnergyLevel.Value, TreeStats.EnergyLevel);
-            _gameUI.LevelIndicators.UpdateWaterLevel(TreeStats.WaterLevel / TreeStats.MaxWaterLevel.Value, TreeStats.WaterLevel);
+            _gameUI.LevelIndicators.UpdateEnergyLevel(energyLevelVal / TreeStats.MaxEnergyLevel.Value, energyLevelVal);
+            _gameUI.LevelIndicators.UpdateWaterLevel(waterLevelVal / TreeStats.MaxWaterLevel.Value, waterLevelVal);
         }
 
 
@@ -62,11 +64,15 @@ public class GameloopManager : MonoBehaviour
 
         if (_isInDeathState)
         {
-            _deathCountdown += Time.deltaTime;
-            if (_deathCountdown >= DurationTillDeath)
+            // Debug.Log("Death Countdown: " + _deathCountdown);
+            _deathCountdown -= Time.deltaTime;
+            if (_deathCountdown > 0.0)
             {
                 _gameUI.DeathCountDownController.UpdateDeathCountdown(_deathCountdown);
-
+            }
+            else if (_deathCountdown <= 0.0)
+            {
+                HandleLoseGame();
             }
         }
     }
@@ -84,8 +90,8 @@ public class GameloopManager : MonoBehaviour
 
     private void StartGameLoop()
     {
-        TreeStats.EnergyLevel = TreeStats.MaxEnergyLevel.Value * 0.5f;
-        TreeStats.WaterLevel = TreeStats.MaxWaterLevel.Value * 0.0f;
+        TreeStats.EnergyLevel.Set(TreeStats.MaxEnergyLevel.Value * 0.07f);
+        TreeStats.WaterLevel.Set(TreeStats.MaxWaterLevel.Value * 0.0f);
 
         _gameUI.DeathCountDownController.ToggleDeathCountdown(false);
 
@@ -169,7 +175,7 @@ public class GameloopManager : MonoBehaviour
         }
 
         float collectedWater = TreeStats.WaterAbsorbtionRate.Value;
-        TreeStats.WaterLevel += collectedWater;
+        TreeStats.WaterLevel.Add(collectedWater);
         return true;
     }
 
@@ -180,16 +186,18 @@ public class GameloopManager : MonoBehaviour
             return;
         }
 
-        TreeStats.WaterLevel -= TreeStats.WaterAmountForEnergyConversion.Value;
+        Debug.Log("Converting Water to Energy");
+
+        TreeStats.WaterLevel.Consume(TreeStats.WaterAmountForEnergyConversion.Value);
         float waterToConvert = TreeStats.WaterAmountForEnergyConversion.Value;
         float energyConverted = TreeStats.WaterToEnergyLogic.ConvertWaterToEnergy(waterToConvert);
-        TreeStats.EnergyLevel += energyConverted;
+        TreeStats.EnergyLevel.Add(energyConverted);
     }
 
     private void ConsumeEnergyCostOfLiving()
     {
-        TreeStats.EnergyLevel -= EnergyCostOfLiving.JustLivingCost * _rooController.RootCount;
-        TreeStats.EnergyLevel -= EnergyCostOfLiving.RootCost;
+        TreeStats.EnergyLevel.Consume(EnergyCostOfLiving.JustLivingCost * _rooController.RootCount);
+        TreeStats.EnergyLevel.Consume(EnergyCostOfLiving.RootCost);
     }
 
 
@@ -198,23 +206,20 @@ public class GameloopManager : MonoBehaviour
         switch (_isInDeathState)
         {
             case true:
-                if (TreeStats.EnergyLevel > 0)
+                if (TreeStats.EnergyLevel.Value > 0)
                 {
                     _isInDeathState = false;
                     _deathCountdown = DurationTillDeath;
                     _gameUI.DeathCountDownController.ToggleDeathCountdown(false);
                     _gameUI.DeathCountDownController.UpdateDeathCountdown(0.0f);
                 }
-                else if (_deathCountdown >= DurationTillDeath)
-                {
-                    HandleLoseGame();
-                }
                 break;
             case false:
-                if (TreeStats.EnergyLevel <= 0)
+                if (TreeStats.EnergyLevel.Value <= 0)
                 {
                     _isInDeathState = true;
-                    _gameUI.DeathCountDownController.UpdateDeathCountdown(0.0f);
+                    _deathCountdown = DurationTillDeath;
+                    _gameUI.DeathCountDownController.UpdateDeathCountdown(_deathCountdown);
                     _gameUI.DeathCountDownController.ToggleDeathCountdown(true);
                 }
                 break;
@@ -226,8 +231,8 @@ public class GameloopManager : MonoBehaviour
 
 public class TreeStats
 {
-    public float EnergyLevel { get; set; }
-    public float WaterLevel { get; set; }
+    public Consumable EnergyLevel { get; set; }
+    public Consumable WaterLevel { get; set; }
     public UpgradableAbility MaxEnergyLevel { get; set; }
     public UpgradableAbility MaxWaterLevel { get; set; }
 
@@ -241,8 +246,8 @@ public class TreeStats
     {
         WaterToEnergyLogic = new WaterToEnergyLogic();
 
-        EnergyLevel = 0;
-        WaterLevel = 0;
+        EnergyLevel = new(0);
+        WaterLevel = new(0);
         MaxEnergyLevel = new(AbilityType.MaxEnergyLevel, new(new float[] { 50, 100, 150 }));
         MaxWaterLevel = new(AbilityType.MaxWaterLevel, new(new float[] { 100, 150, 200 }));
 
@@ -252,11 +257,11 @@ public class TreeStats
         WaterAbsorbtionRate = new(AbilityType.IncreaseWaterAbsortionRate, new(new float[] { 0.3f, 0.5f, 0.7f }));
     }
 
-    public bool SufficentWaterForEnergyConversion() => WaterLevel > 0;
+    public bool SufficentWaterForEnergyConversion() => WaterLevel.Value > 0;
 
-    public bool IsEnergyFull() => EnergyLevel >= MaxEnergyLevel.Value;
+    public bool IsEnergyFull() => EnergyLevel.Value >= MaxEnergyLevel.Value;
 
-    public bool IsWaterFull() => WaterLevel >= MaxWaterLevel.Value;
+    public bool IsWaterFull() => WaterLevel.Value >= MaxWaterLevel.Value;
 }
 
 public class WaterToEnergyLogic
@@ -290,6 +295,34 @@ public class EnergyCostOfLiving
 {
     [SerializeField] public float RootCost { get; private set; } = 0.2f;
     [SerializeField] public float JustLivingCost { get; private set; } = 0.3f;
+
+}
+
+public class Consumable
+{
+    public float Value { get; private set; }
+
+    public Consumable(float value)
+    {
+        Value = value;
+    }
+
+    public void Consume(float amount)
+    {
+        Value -= amount;
+        Value = Mathf.Max(0, Value);
+    }
+
+    public void Add(float amount)
+    {
+        Value += amount;
+    }
+
+    public void Set(float value)
+    {
+        Value = value;
+        Value = Mathf.Max(0, Value);
+    }
 
 }
 

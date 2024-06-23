@@ -44,13 +44,17 @@ public class GameUI : MonoBehaviour
         GameloopManager gameloopManager = FindObjectOfType<GameloopManager>();
 
 
-        bool CanUpgrade(float cost) => gameloopManager.TreeStats.EnergyLevel >= cost;
+        bool CanUpgrade(float cost) => gameloopManager.TreeStats.EnergyLevel.Value >= cost;
 
         void UpdateLevelIndicators()
         {
             TreeStats treeStats = gameloopManager.TreeStats;
-            LevelIndicators.UpdateEnergyLevel(treeStats.EnergyLevel / treeStats.MaxEnergyLevel.Value, treeStats.EnergyLevel);
-            LevelIndicators.UpdateWaterLevel(treeStats.WaterLevel / treeStats.MaxWaterLevel.Value, treeStats.WaterLevel);
+
+            float eneryLevlVal = treeStats.EnergyLevel.Value;
+            float waterLevelVal = treeStats.WaterLevel.Value;
+
+            LevelIndicators.UpdateEnergyLevel(eneryLevlVal / treeStats.MaxEnergyLevel.Value, eneryLevlVal);
+            LevelIndicators.UpdateWaterLevel(waterLevelVal / treeStats.MaxWaterLevel.Value, waterLevelVal);
         }
 
         TreeStats treeStats = gameloopManager.TreeStats;
@@ -62,7 +66,7 @@ public class GameUI : MonoBehaviour
                     OnClicked = () =>
                     {
                         if(CanUpgrade(treeStats.MaxEnergyLevel.GetUpgradeCost())){
-                        treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
+                        treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.MaxEnergyLevel.Upgrade();
                             UpdateLevelIndicators();
                         }
@@ -77,7 +81,7 @@ public class GameUI : MonoBehaviour
                     OnClicked = () =>
                     {
                         if(CanUpgrade(treeStats.MaxWaterLevel.GetUpgradeCost()))
-                        treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
+                        treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.MaxWaterLevel.Upgrade();
                             UpdateLevelIndicators();
                     }
@@ -90,7 +94,7 @@ public class GameUI : MonoBehaviour
                     OnClicked = () =>
                     {
                         if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost()))
-                        treeStats.EnergyLevel -= treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost();
+                        treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.WaterToEnergyLogic.UpgradableAbility.Upgrade();
                             UpdateLevelIndicators();
                     }
@@ -144,7 +148,7 @@ public class DeathCountDownController
 
     public void UpdateDeathCountdown(float countdown)
     {
-        DeathCountdownText.text = countdown.ToString("F2");
+        DeathCountdownText.text = countdown.ToString("00.0");
     }
 
     public void ToggleDeathCountdown(bool value, bool tween = false)
