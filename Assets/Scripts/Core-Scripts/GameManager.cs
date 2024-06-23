@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         Debug.Log("Restarting Game");
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        StartCoroutine(CheckIfBanksLoaded(() =>
+        {
+            GameloopManager gameloopManager = FindObjectOfType<GameloopManager>();
+            gameloopManager.StartGame();
+        }));
     }
 }
 

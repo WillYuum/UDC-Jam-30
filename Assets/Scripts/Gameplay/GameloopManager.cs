@@ -51,6 +51,8 @@ public class GameloopManager : MonoBehaviour
         _gameTicker.OnTick += InvokeLifeCycleEvents;
 
         _gameTicker.ToggleTicker(false);
+
+        ToggleLoop(false);
     }
 
     void Start()
@@ -73,8 +75,14 @@ public class GameloopManager : MonoBehaviour
             else if (_deathCountdown <= 0.0)
             {
                 HandleLoseGame();
+                ToggleLoop(false);
             }
         }
+    }
+
+    private void ToggleLoop(bool active)
+    {
+        enabled = active;
     }
 
     public void StartGame()
@@ -127,6 +135,8 @@ public class GameloopManager : MonoBehaviour
 
 
         SetupListentingToEndGame();
+
+        ToggleLoop(true);
     }
 
 
@@ -185,8 +195,6 @@ public class GameloopManager : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log("Converting Water to Energy");
 
         TreeStats.WaterLevel.Consume(TreeStats.WaterAmountForEnergyConversion.Value);
         float waterToConvert = TreeStats.WaterAmountForEnergyConversion.Value;
