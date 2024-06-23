@@ -42,9 +42,9 @@ public class SceneryController : MonoBehaviour
     }
 
 
-    public Bounds GetBackgroundBounds()
+    public SpriteRenderer GetBackgroundBounds()
     {
-        return _backgroundRender.bounds;
+        return _backgroundRender;
     }
 }
 

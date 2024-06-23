@@ -55,8 +55,10 @@ public class DayTimeController : MonoBehaviour
     private void RotateVisuals(float gameTime)
     {
         Vector2 center = new Vector2(0f, 0f);
-        float radius = 6.0f;
-        _sunTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + Mathf.PI), center.y + radius * -Mathf.Sin(gameTime * 0.1f + Mathf.PI));
+        float radius = 4.75f;
+        float startPosition = Mathf.PI * 1.5f;
+        _sunTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition));
+        _moonTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition + Mathf.PI), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition + Mathf.PI));
 
     }
 
