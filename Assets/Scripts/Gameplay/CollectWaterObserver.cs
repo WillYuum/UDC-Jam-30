@@ -42,6 +42,13 @@ public class CollectWaterObserver : MonoBehaviourSingleton<CollectWaterObserver>
             WaterResource[] waterResources = root.LinkedResources.ToArray();
             foreach (WaterResource waterResource in waterResources)
             {
+                if (waterResource == null)
+                {
+                    root.LinkedResources.Remove(waterResource);
+                    continue;
+                }
+
+
                 bool hasCollectedWater = gameloopManager.CollectWater();
 
                 if (hasCollectedWater == false)
