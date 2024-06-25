@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Net.NetworkInformation;
 
 public class GameUI : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class GameUI : MonoBehaviour
 
     [SerializeField] private GameObject _upgradeScreen;
     [SerializeField] private Button _buttonToUpgradeScreen;
+
+    [field: SerializeField] public TreeStatsUI TreeStatsUI { get; private set; }
 
     [field: SerializeField] public DeathCountDownController DeathCountDownController { get; private set; }
 
@@ -178,5 +181,29 @@ public class DeathCountDownController
                 });
             });
         }
+    }
+}
+
+
+
+[System.Serializable]
+public class TreeStatsUI
+{
+    [SerializeField] private TextMeshProUGUI _energyGainText;
+    [SerializeField] private TextMeshProUGUI _waterGainText;
+    [SerializeField] private TextMeshProUGUI _costOfLivingText;
+
+
+    public void UpdateAllText(float energyGain, float waterGain, float costOfLiving)
+    {
+        UpdateText(_energyGainText, "Energy Gain: ", energyGain);
+        UpdateText(_waterGainText, "Water Gain: ", waterGain);
+        UpdateText(_costOfLivingText, "Cost of Living: ", costOfLiving);
+    }
+
+
+    private void UpdateText(TextMeshProUGUI text, String prefix, float value)
+    {
+        text.text = prefix + value.ToString();
     }
 }

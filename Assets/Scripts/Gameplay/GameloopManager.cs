@@ -35,7 +35,7 @@ public class GameloopManager : MonoBehaviour
 
         void InvokeLifeCycleEvents()
         {
-            ConvertWaterToEnergy();
+            float energyCollected = ConvertWaterToEnergy();
             ConsumeEnergyCostOfLiving();
 
             CheckEnergyStatus();
@@ -45,6 +45,14 @@ public class GameloopManager : MonoBehaviour
 
             _gameUI.LevelIndicators.UpdateEnergyLevel(energyLevelVal / TreeStats.MaxEnergyLevel.Value, energyLevelVal);
             _gameUI.LevelIndicators.UpdateWaterLevel(waterLevelVal / TreeStats.MaxWaterLevel.Value, waterLevelVal);
+
+
+            float waterGain = TreeStats.WaterAbsorbtionRate.Value;
+            float costOfLiving = EnergyCostOfLiving.GetTotalCost(_rooController.RootCount);
+
+            _gameUI.TreeStatsUI.UpdateAllText(energyCollected, waterGain, costOfLiving);
+
+            // _gameUI.TreeStatsUI.UpdateAllText(TreeStats.
         }
 
 
@@ -58,6 +66,8 @@ public class GameloopManager : MonoBehaviour
     void Start()
     {
         _gameUI.GameTimeText.gameObject.SetActive(false);
+
+
     }
 
     void Update()
@@ -178,7 +188,6 @@ public class GameloopManager : MonoBehaviour
 
     public bool CollectWater()
     {
-
         if (TreeStats.IsWaterFull())
         {
             return false;
@@ -189,23 +198,35 @@ public class GameloopManager : MonoBehaviour
         return true;
     }
 
-    private void ConvertWaterToEnergy()
+    private float ConvertWaterToEnergy()
     {
         if (!TreeStats.SufficentWaterForEnergyConversion() || TreeStats.IsEnergyFull())
         {
-            return;
+            if (TreeStats.IsEnergyFull())
+            {
+                Debug.Log("Energy Full");
+            }
+            else if (!TreeStats.SufficentWaterForEnergyConversion())
+            {
+                Debug.Log("Not Enough Water");
+            }
+
+            return 0.0f;
         }
 
-        TreeStats.WaterLevel.Consume(TreeStats.WaterAmountForEnergyConversion.Value);
-        float waterToConvert = TreeStats.WaterAmountForEnergyConversion.Value;
-        float energyConverted = TreeStats.WaterToEnergyLogic.ConvertWaterToEnergy(waterToConvert);
-        TreeStats.EnergyLevel.Add(energyConverted);
+        float waterToUse = TreeStats.WaterAmountForEnergyConversion.Value;
+        float energyCollected = TreeStats.WaterToEnergyLogic.ConvertWaterToEnergy(waterToUse);
+
+        TreeStats.WaterLevel.Consume(waterToUse);
+        TreeStats.EnergyLevel.Add(energyCollected);
+
+        return energyCollected;
     }
 
     private void ConsumeEnergyCostOfLiving()
     {
-        TreeStats.EnergyLevel.Consume(EnergyCostOfLiving.JustLivingCost * _rooController.RootCount);
-        TreeStats.EnergyLevel.Consume(EnergyCostOfLiving.RootCost);
+        float cost = EnergyCostOfLiving.GetTotalCost(_rooController.RootCount);
+        TreeStats.EnergyLevel.Consume(cost);
     }
 
 
@@ -260,7 +281,6 @@ public class TreeStats
         MaxWaterLevel = new(AbilityType.MaxWaterLevel, new(new float[] { 100, 150, 200 }));
 
 
-        WaterToEnergyLogic.UpdateWaterToEnergyRate(0.5f); //By Percentage
         WaterAmountForEnergyConversion = new(AbilityType.WaterAmountForEnergyConversion, new(new float[] { 0.4f, 0.3f, 0.2f }));
         WaterAbsorbtionRate = new(AbilityType.IncreaseWaterAbsortionRate, new(new float[] { 0.3f, 0.5f, 0.7f }));
     }
@@ -281,17 +301,13 @@ public class WaterToEnergyLogic
 
     public WaterToEnergyLogic()
     {
-        UpgradableAbility = new(AbilityType.IncreaseWaterConversionRate, new(new float[] { 0.5f, 0.6f, 0.7f }));
+        UpgradableAbility = new(AbilityType.IncreaseWaterConversionRate, new(new float[] { 1.5f, 1.6f, 1.7f })); //Percentage
+        _waterToEnergyRate = UpgradableAbility.Value;
     }
 
     public float ConvertWaterToEnergy(float waterAmount)
     {
         return waterAmount * _waterToEnergyRate;
-    }
-
-    public void UpdateWaterToEnergyRate(float newRate)
-    {
-        _waterToEnergyRate = newRate;
     }
 }
 
@@ -303,6 +319,12 @@ public class EnergyCostOfLiving
 {
     [SerializeField] public float RootCost { get; private set; } = 0.2f;
     [SerializeField] public float JustLivingCost { get; private set; } = 0.3f;
+
+
+    public float GetTotalCost(int rootCount)
+    {
+        return JustLivingCost + (rootCount * RootCost);
+    }
 
 }
 
@@ -411,3 +433,4 @@ public class UpgradeData
         return ValueLevels[CurrentLevel].ToString() + "->" + ValueLevels[CurrentLevel + 1].ToString();
     }
 }
+
