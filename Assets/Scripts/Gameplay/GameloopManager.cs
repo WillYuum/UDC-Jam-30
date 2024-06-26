@@ -301,7 +301,7 @@ public class WaterToEnergyLogic
 
     public WaterToEnergyLogic()
     {
-        UpgradableAbility = new(AbilityType.IncreaseWaterConversionRate, new(new float[] { 1.5f, 1.6f, 1.7f })); //Percentage
+        UpgradableAbility = new(AbilityType.IncreaseWaterConversionRate, new(new float[] { 1.5f, 2.0f, 3.5f })); //Percentage
         _waterToEnergyRate = UpgradableAbility.Value;
     }
 
@@ -323,7 +323,7 @@ public class WaterToEnergyLogic
 [System.Serializable]
 public class EnergyCostOfLiving
 {
-    [SerializeField] public float RootCost { get; private set; } = 0.08f;
+    [SerializeField] public float RootCost { get; private set; } = 0.05f;
     [SerializeField] public float JustLivingCost { get; private set; } = 0.25f;
 
 
