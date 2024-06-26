@@ -83,10 +83,12 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.MaxWaterLevel.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-                        if(CanUpgrade(treeStats.MaxWaterLevel.GetUpgradeCost()))
+                        if(CanUpgrade(treeStats.MaxWaterLevel.GetUpgradeCost())){
                         treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.MaxWaterLevel.Upgrade();
                             UpdateLevelIndicators();
+
+                        }
                     }
                 },
                 new()
@@ -96,10 +98,12 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-                        if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost()))
+                        if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost())){
+
                         treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.WaterToEnergyLogic.UpdateWaterToEnergyRate();
                             UpdateLevelIndicators();
+                        }
                     }
                 }
 
