@@ -108,7 +108,7 @@ public class GameloopManager : MonoBehaviour
 
     private void StartGameLoop()
     {
-        TreeStats.EnergyLevel.Set(TreeStats.MaxEnergyLevel.Value * 0.07f);
+        TreeStats.EnergyLevel.Set(TreeStats.MaxEnergyLevel.Value * 0.12f);
         TreeStats.WaterLevel.Set(TreeStats.MaxWaterLevel.Value * 0.0f);
 
         _gameUI.DeathCountDownController.ToggleDeathCountdown(false);
@@ -317,8 +317,8 @@ public class WaterToEnergyLogic
 [System.Serializable]
 public class EnergyCostOfLiving
 {
-    [SerializeField] public float RootCost { get; private set; } = 0.2f;
-    [SerializeField] public float JustLivingCost { get; private set; } = 0.3f;
+    [SerializeField] public float RootCost { get; private set; } = 0.08f;
+    [SerializeField] public float JustLivingCost { get; private set; } = 0.25f;
 
 
     public float GetTotalCost(int rootCount)
