@@ -98,7 +98,7 @@ public class GameUI : MonoBehaviour
                     {
                         if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost()))
                         treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
-                            treeStats.WaterToEnergyLogic.UpgradableAbility.Upgrade();
+                            treeStats.WaterToEnergyLogic.UpdateWaterToEnergyRate();
                             UpdateLevelIndicators();
                     }
                 }

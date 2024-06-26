@@ -309,6 +309,12 @@ public class WaterToEnergyLogic
     {
         return waterAmount * _waterToEnergyRate;
     }
+
+    public void UpdateWaterToEnergyRate()
+    {
+        UpgradableAbility.Upgrade();
+        _waterToEnergyRate = UpgradableAbility.Value;
+    }
 }
 
 
@@ -378,6 +384,7 @@ public class UpgradableAbility
     private UpgradeData _data;
 
     private float _baseUpgradeCost = 5f;
+    public float Value => _data.ValueLevels[_data.CurrentLevel];
 
     public UpgradableAbility(AbilityType type, UpgradeData data)
     {
@@ -387,7 +394,6 @@ public class UpgradableAbility
 
     public float GetUpgradeCost() => _baseUpgradeCost * (_data.CurrentLevel + 1);
 
-    public float Value => _data.ValueLevels[_data.CurrentLevel];
     public string GetUpgradeInfo() => _data.GetUpgradeInfo();
 
     public void Upgrade()
