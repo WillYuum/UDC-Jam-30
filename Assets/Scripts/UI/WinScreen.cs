@@ -10,11 +10,6 @@ public class WinScreen : MonoBehaviour
 
     private bool _isPlaying = false;
 
-    void Awake()
-    {
-        gameObject.SetActive(false);
-    }
-
 
     void Update()
     {
@@ -26,6 +21,7 @@ public class WinScreen : MonoBehaviour
 
     public void PlayWinScreen()
     {
+        gameObject.SetActive(true);
         gameObject.GetComponent<Image>().DOFade(1, 1).SetDelay(0.75f);
 
         _isPlaying = true;

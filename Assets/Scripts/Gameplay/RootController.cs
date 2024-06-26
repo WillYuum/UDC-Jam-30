@@ -83,7 +83,7 @@ public class RootController : MonoBehaviour
     {
         _startPosition = position;
 
-        _spawnedRoot = Instantiate(_rootLineRenderer).GetComponent<RootSegment>();
+        _spawnedRoot = Instantiate(_rootLineRenderer, _renderLinesHolder.transform).GetComponent<RootSegment>();
         _spawnedRoot.SetStartPosition(position);
         _spawnedRoot.UpdateEndPosition(position);
 

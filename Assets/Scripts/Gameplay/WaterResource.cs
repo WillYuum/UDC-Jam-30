@@ -43,6 +43,7 @@ public class WaterResource : MonoBehaviour
 
         if (isEmpty)
         {
+            DOTween.Kill(transform);
             Destroy(gameObject);
         }
 

@@ -52,14 +52,16 @@ public class DayTimeController : MonoBehaviour
 
     }
 
+    private Vector2 _startPosition = new Vector2(0f, 0f);
     private void RotateVisuals(float gameTime)
     {
         Vector2 center = new Vector2(0f, 0f);
         float radius = 4.75f;
-        float startPosition = Mathf.PI * 1.5f;
-        _sunTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition));
-        _moonTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition + Mathf.PI), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition + Mathf.PI));
+        // _sunTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition));
+        // _moonTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition + Mathf.PI), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition + Mathf.PI));
 
+        _sunTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + _startPosition.x), center.y + radius * -Mathf.Sin(gameTime * 0.1f + _startPosition.y));
+        _moonTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + _startPosition.x + Mathf.PI), center.y + radius * -Mathf.Sin(gameTime * 0.1f + _startPosition.y + Mathf.PI));
     }
 
     public void SetState(DayNightState state)
