@@ -47,7 +47,11 @@ public class GameUI : MonoBehaviour
         GameloopManager gameloopManager = FindObjectOfType<GameloopManager>();
 
 
-        bool CanUpgrade(float cost) => gameloopManager.TreeStats.EnergyLevel.Value >= cost;
+        bool CanUpgrade(UpgradableAbility upgradableAbility, float cost)
+        {
+            return gameloopManager.TreeStats.EnergyLevel.Value >= cost && upgradableAbility.IsMaxLevel() == false;
+        }
+
 
         void UpdateLevelIndicators()
         {
@@ -68,7 +72,7 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.MaxEnergyLevel.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-                        if(CanUpgrade(treeStats.MaxEnergyLevel.GetUpgradeCost())){
+                        if(CanUpgrade(treeStats.MaxEnergyLevel, treeStats.MaxEnergyLevel.GetUpgradeCost())){
                         treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.MaxEnergyLevel.Upgrade();
                             UpdateLevelIndicators();
@@ -83,7 +87,7 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.MaxWaterLevel.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-                        if(CanUpgrade(treeStats.MaxWaterLevel.GetUpgradeCost())){
+                        if(CanUpgrade(treeStats.MaxWaterLevel, treeStats.MaxWaterLevel.GetUpgradeCost())){
                         treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.MaxWaterLevel.Upgrade();
                             UpdateLevelIndicators();
@@ -98,7 +102,7 @@ public class GameUI : MonoBehaviour
                     Cost = treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost(),
                     OnClicked = () =>
                     {
-                        if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost())){
+                        if(CanUpgrade(treeStats.WaterToEnergyLogic.UpgradableAbility, treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost())){
 
                         treeStats.EnergyLevel.Consume(treeStats.WaterToEnergyLogic.UpgradableAbility.GetUpgradeCost());
                             treeStats.WaterToEnergyLogic.UpdateWaterToEnergyRate();

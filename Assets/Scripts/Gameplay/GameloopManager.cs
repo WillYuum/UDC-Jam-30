@@ -401,6 +401,8 @@ public class UpgradableAbility
 
     public string GetUpgradeInfo() => _data.GetUpgradeInfo();
 
+    public bool IsMaxLevel() => _data.IsMaxLevel();
+
     public void Upgrade()
     {
         _data.Upgrade();
