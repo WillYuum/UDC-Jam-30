@@ -28,14 +28,24 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
         callback.Invoke();
     }
-    public void RestartGame()
+
+    public void RestartGame(bool skipIntro = false)
     {
         Debug.Log("Restarting Game");
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         StartCoroutine(CheckIfBanksLoaded(() =>
         {
             GameloopManager gameloopManager = FindObjectOfType<GameloopManager>();
-            gameloopManager.StartGame();
+
+            if (skipIntro)
+            {
+                gameloopManager.StartGameLoop();
+            }
+            else
+            {
+                gameloopManager.StartGame();
+            }
+
         }));
     }
 }

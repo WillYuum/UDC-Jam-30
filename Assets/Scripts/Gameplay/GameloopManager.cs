@@ -88,6 +88,11 @@ public class GameloopManager : MonoBehaviour
                 ToggleLoop(false);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.instance.RestartGame(true);
+        }
     }
 
     private void ToggleLoop(bool active)
@@ -106,7 +111,7 @@ public class GameloopManager : MonoBehaviour
         _gameUI.PlayGameIntro(StartGameLoop);
     }
 
-    private void StartGameLoop()
+    public void StartGameLoop()
     {
         TreeStats.EnergyLevel.Set(TreeStats.MaxEnergyLevel.Value * 0.12f);
         TreeStats.WaterLevel.Set(TreeStats.MaxWaterLevel.Value * 0.0f);
