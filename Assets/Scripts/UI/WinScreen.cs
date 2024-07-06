@@ -22,7 +22,7 @@ public class WinScreen : MonoBehaviour
     public void PlayWinScreen()
     {
         gameObject.SetActive(true);
-        gameObject.GetComponent<Image>().DOFade(1, 1).SetDelay(0.75f);
+        bg.GetComponent<Image>().DOFade(1, 1).SetDelay(0.75f);
 
         _isPlaying = true;
 
