@@ -275,6 +275,8 @@ public class TreeStats
 
     public UpgradableAbility WaterAbsorbtionRate { get; set; }
 
+    public float RootGrowthDuration { get; set; }
+
 
     public TreeStats()
     {
@@ -285,6 +287,7 @@ public class TreeStats
         MaxEnergyLevel = new(AbilityType.MaxEnergyLevel, new(new float[] { 50, 100, 150 }));
         MaxWaterLevel = new(AbilityType.MaxWaterLevel, new(new float[] { 100, 150, 200 }));
 
+        RootGrowthDuration = 5.0f;
 
         WaterAmountForEnergyConversion = new(AbilityType.WaterAmountForEnergyConversion, new(new float[] { 0.4f, 0.3f, 0.2f }));
         WaterAbsorbtionRate = new(AbilityType.IncreaseWaterAbsortionRate, new(new float[] { 0.3f, 0.5f, 0.7f }));

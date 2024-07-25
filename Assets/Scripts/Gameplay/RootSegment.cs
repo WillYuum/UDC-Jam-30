@@ -23,16 +23,10 @@ public class RootSegment : MonoBehaviour
         _lineRenderer.SetPosition(0, startPosition);
     }
 
-
+    public Vector2 ActualEndPosition;
     public void UpdateEndPosition(Vector2 endPosition)
     {
         _lineRenderer.SetPosition(1, endPosition);
-    }
-
-    public void SetEndPosition(Vector2 endPosition)
-    {
-        // _lineRenderer.SetPosition(1, endPosition);
-        // RootInteractable.gameObject.SetActive(true);
     }
 
     public void AddResourceConnection(WaterResource[] waterResource)
@@ -45,6 +39,11 @@ public class RootSegment : MonoBehaviour
     public void SetNodeConnection(GameObject node)
     {
         node.transform.position = _lineRenderer.GetPosition(1);
+    }
+
+    public Vector2 GetStartPosition()
+    {
+        return _lineRenderer.GetPosition(0);
     }
 
     public Vector2 GetEndPosition()
