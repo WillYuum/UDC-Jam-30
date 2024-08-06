@@ -1,86 +1,70 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DayTimeController : MonoBehaviour
 {
-    public enum DayNightState
-    {
-        Day,
-        Night,
-    }
-
-    public DayNightState CurrentState { get; private set; } = DayNightState.Day;
-
-    private float _dayDurationInMinutes = 6.0f;
-    private float _nightDurationInMinutes = 5.5f;
-
-    private GameTicker _gameTicker;
-
     [SerializeField] private Transform _sunTransform;
     [SerializeField] private Transform _moonTransform;
 
-    void Awake()
+    private float _moonSunDistFromCenter = 4.75f;
+    private TimeManager _timeManager;
+
+    private void Awake()
     {
-        _gameTicker = FindObjectOfType<GameTicker>();
-    }
-
-
-
-    void Update()
-    {
-        float gameTime = _gameTicker.GameTime;
-
-        if (CurrentState == DayNightState.Day)
+        _timeManager = FindObjectOfType<TimeManager>();
+        if (_timeManager == null)
         {
-            if (gameTime % _dayDurationInMinutes >= _dayDurationInMinutes * 60f)
-            {
-                ToggleState();
-            }
-        }
-        else
-        {
-            if (gameTime % _dayDurationInMinutes >= _nightDurationInMinutes * 60f)
-            {
-                ToggleState();
-            }
+            Debug.LogError("TimeManager not found in the scene.");
+            enabled = false;
+            return;
         }
 
-
-        RotateVisuals(gameTime);
-
+        _timeManager.OnDayStart += () => HandleChangeDayNightState(TimeManager.DayNightState.Day);
+        _timeManager.OnNightStart += () => HandleChangeDayNightState(TimeManager.DayNightState.Night);
     }
 
-    private Vector2 _startPosition = new Vector2(0f, 0f);
-    private void RotateVisuals(float gameTime)
+    private void OnDestroy()
     {
-        Vector2 center = new Vector2(0f, 0f);
-        float radius = 4.75f;
-        // _sunTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition));
-        // _moonTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + startPosition + Mathf.PI), center.y + radius * -Mathf.Sin(gameTime * 0.1f + startPosition + Mathf.PI));
-
-        _sunTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + _startPosition.x), center.y + radius * -Mathf.Sin(gameTime * 0.1f + _startPosition.y));
-        _moonTransform.position = new Vector2(center.x + radius * Mathf.Cos(gameTime * 0.1f + _startPosition.x + Mathf.PI), center.y + radius * -Mathf.Sin(gameTime * 0.1f + _startPosition.y + Mathf.PI));
+        if (_timeManager != null)
+        {
+            _timeManager.OnDayStart -= () => HandleChangeDayNightState(TimeManager.DayNightState.Day);
+            _timeManager.OnNightStart -= () => HandleChangeDayNightState(TimeManager.DayNightState.Night);
+        }
     }
 
-    public void SetState(DayNightState state)
+    public void HandleChangeDayNightState(TimeManager.DayNightState state)
     {
-        CurrentState = state;
-    }
-
-    public void ToggleState()
-    {
-        CurrentState = CurrentState == DayNightState.Day ? DayNightState.Night : DayNightState.Day;
-        if (CurrentState == DayNightState.Day)
+        if (state == TimeManager.DayNightState.Day)
         {
             _sunTransform.gameObject.SetActive(true);
             _moonTransform.gameObject.SetActive(false);
+            _sunTransform.position = new Vector2(-_moonSunDistFromCenter, 0f); // Start sun on the left side
         }
         else
         {
             _sunTransform.gameObject.SetActive(false);
             _moonTransform.gameObject.SetActive(true);
+            _moonTransform.position = new Vector2(-_moonSunDistFromCenter, 0f); // Start moon on the left side
         }
+    }
+
+    private void Update()
+    {
+        float gameTime = _timeManager.GetCurrentTime();
+        float totalDuration = _timeManager.CurrentState == TimeManager.DayNightState.Day ? _timeManager.DayDurationInSeconds : _timeManager.NightDurationInSeconds;
+
+        float ratioToComplete = gameTime / totalDuration;
+
+        Transform activeTransform = _timeManager.CurrentState == TimeManager.DayNightState.Day ? _sunTransform : _moonTransform;
+        RotateVisuals(activeTransform, ratioToComplete);
+    }
+
+    private void RotateVisuals(Transform activeTransform, float ratioToComplete)
+    {
+        Vector2 center = Vector2.zero;
+        float radians = Mathf.Lerp(0, Mathf.PI, ratioToComplete);
+
+        activeTransform.position = new Vector2(center.x + _moonSunDistFromCenter * -Mathf.Cos(radians),
+                                               center.y + _moonSunDistFromCenter * Mathf.Sin(radians));
     }
 }
