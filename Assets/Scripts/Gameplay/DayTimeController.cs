@@ -51,16 +51,10 @@ public class DayTimeController : MonoBehaviour
     private void Update()
     {
         float ratioToComplete = _timeManager.CurrentState == TimeManager.DayNightState.Day ? _timeManager.GetDayTimeRatio() : _timeManager.GetNightTimeRatio();
+        Debug.Log($"DayNightTime ratio: {ratioToComplete}");
         Transform activeTransform = _timeManager.GetCurrentState() == TimeManager.DayNightState.Day ? _sunTransform : _moonTransform;
         RotateVisuals(activeTransform, ratioToComplete);
     }
-
-    // private float GetTimeRatio()
-    // {
-    // float currentTime = _timeManager.GetCurrentTime();
-    // float totalCycleDuration = TimeManager.TotalCycleDuration; // Duration of a full day-night cycle
-    // return currentTime / totalCycleDuration;
-    // }
 
     private void RotateVisuals(Transform activeTransform, float ratioToComplete)
     {

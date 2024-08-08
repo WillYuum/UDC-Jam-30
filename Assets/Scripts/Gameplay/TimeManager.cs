@@ -16,6 +16,12 @@ public class TimeManager : MonoBehaviour
         public int Minute { get; private set; } = 0;
         public float Second { get; private set; } = 0;
 
+
+        public float GetTotalSeconds()
+        {
+            return Hour * 60 * 60 + Minute * 60 + Second;
+        }
+
         public string GetTimeInHoursAndMinutes()
         {
             return string.Format("{0:00}:{1:00}", Hour, Minute);
@@ -124,7 +130,10 @@ public class TimeManager : MonoBehaviour
     {
         if (CurrentState == DayNightState.Day)
         {
-            return _currentTimeInfo.Hour / 12f;
+
+            float dayStartTimeInSeconds = 8 * 60 * 60; // 8 hours in seconds
+            return (_currentTimeInfo.GetTotalSeconds() - dayStartTimeInSeconds) / (12 * 60 * 60); // 12 hours in seconds
+
         }
         return 0f; // No daytime ratio if it's night
     }
@@ -133,7 +142,8 @@ public class TimeManager : MonoBehaviour
     {
         if (CurrentState == DayNightState.Night)
         {
-            return _currentTimeInfo.Hour / 12f;
+            float nightStartTimeInSeconds = 20 * 60 * 60; // 20 hours in seconds
+            return (_currentTimeInfo.GetTotalSeconds() - nightStartTimeInSeconds) / (12 * 60 * 60); // 12 hours in seconds
         }
         return 0f; // No nighttime ratio if it's day
     }
