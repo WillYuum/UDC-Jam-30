@@ -6,7 +6,7 @@ public class GameTicker : MonoBehaviour
     [SerializeField] private int _tickRatePerSecond = 1;
     [HideInInspector] public float GameTime { get; private set; }
 
-    [field: SerializeField] public float FastForwardMultiplier { get; private set; } = 2f;
+    [field: SerializeField] public float TimeMultiplier { get; private set; } = 1.5f; // Default to 1.5x
 
     public event Action OnTick;
 
@@ -21,7 +21,7 @@ public class GameTicker : MonoBehaviour
     void Start()
     {
         _normalTickDuration = 1f / _tickRatePerSecond;
-        _fastTickDuration = _normalTickDuration / FastForwardMultiplier;
+        _fastTickDuration = _normalTickDuration / TimeMultiplier;
         _timeTillNextTick = _normalTickDuration;
 
         GameTime = 0f;
@@ -38,31 +38,35 @@ public class GameTicker : MonoBehaviour
             InvokeTick();
         }
 
-        GameTime += IsFastMode ? Time.deltaTime * FastForwardMultiplier : Time.deltaTime;
+        GameTime += IsFastMode ? Time.deltaTime * TimeMultiplier : Time.deltaTime;
     }
 
     private void HandleModeSwitch()
     {
         if (Input.GetKey(KeyCode.E))
         {
-            if (!IsFastMode)
-            {
-                SetFastMode(true);
-            }
+            SetFastMode(true, 1.5f);
+        }
+        else if (Input.GetKey(KeyCode.R))
+        {
+            SetFastMode(true, 2f);
+        }
+        else if (Input.GetKey(KeyCode.T))
+        {
+            SetFastMode(true, 2.5f);
         }
         else
         {
-            if (IsFastMode)
-            {
-                SetFastMode(false);
-            }
+            SetFastMode(false, 1f);
         }
     }
 
-    private void SetFastMode(bool isFast)
+    private void SetFastMode(bool isFast, float multiplier)
     {
         IsFastMode = isFast;
-        _timeTillNextTick = IsFastMode ? _fastTickDuration : _normalTickDuration;
+        TimeMultiplier = multiplier;
+        _fastTickDuration = _normalTickDuration / TimeMultiplier;
+        _timeTillNextTick = _fastTickDuration;
     }
 
     private void InvokeTick()

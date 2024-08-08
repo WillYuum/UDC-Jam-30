@@ -77,6 +77,8 @@ public class TimeManager : MonoBehaviour
 
     public const float CycleDurationInRealTime = 30f; // Total duration of a full day-night cycle in seconds
 
+    private GameTicker _gameTicker;
+
     private int _currentDay;
     public event Action OnDayStart;
     public event Action OnNightStart;
@@ -95,12 +97,15 @@ public class TimeManager : MonoBehaviour
         CurrentState = DayNightState.Day; // Start with daytime
         timedEvents = new List<TimedEvent>();
         OnDayStart?.Invoke();
+        _gameTicker = FindObjectOfType<GameTicker>();
     }
 
     private readonly int _twentyFourHourInSecond = 86400;
     void Update()
     {
-        _currentTimeInfo.IncrementTimeInSeconds(Time.deltaTime * _twentyFourHourInSecond / CycleDurationInRealTime);
+
+        float adjustedDeltaTime = Time.deltaTime * _gameTicker.TimeMultiplier; // Adjust time by the multiplier
+        _currentTimeInfo.IncrementTimeInSeconds(adjustedDeltaTime * _twentyFourHourInSecond / CycleDurationInRealTime);
 
 
         if (_currentTimeInfo.Hour == 8)

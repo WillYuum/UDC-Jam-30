@@ -93,7 +93,7 @@ public class GameloopManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
             GameManager.instance.RestartGame(true);
         }
