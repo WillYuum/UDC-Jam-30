@@ -21,9 +21,14 @@ public class GameloopManager : MonoBehaviour
     private float _deathCountdown = 0f;
     private bool _isInDeathState = false;
 
+    private TimeManager _timeManager;
+
 
     void Awake()
     {
+        _timeManager = FindObjectOfType<TimeManager>();
+        _timeManager.enabled = false;
+
         _gameUI = FindObjectOfType<GameUI>();
         _gameTicker = FindObjectOfType<GameTicker>();
 
@@ -65,14 +70,13 @@ public class GameloopManager : MonoBehaviour
 
     void Start()
     {
-        _gameUI.GameTimeText.gameObject.SetActive(false);
-
+        // _gameUI.GameTimeText.gameObject.SetActive(false);
 
     }
 
     void Update()
     {
-        _gameUI.GameTimeText.text = _gameTicker.GameTime.ToString("F2");
+        _gameUI.GameTimeText.text = _timeManager.GetCurrentTimeIn24HourFormat();
 
         if (_isInDeathState)
         {
@@ -113,7 +117,7 @@ public class GameloopManager : MonoBehaviour
 
     public void StartGameLoop()
     {
-        TreeStats.EnergyLevel.Set(TreeStats.MaxEnergyLevel.Value * 0.12f);
+        TreeStats.EnergyLevel.Set(TreeStats.MaxEnergyLevel.Value * 0.82f);
         TreeStats.WaterLevel.Set(TreeStats.MaxWaterLevel.Value * 0.0f);
 
         _gameUI.DeathCountDownController.ToggleDeathCountdown(false);
@@ -122,6 +126,8 @@ public class GameloopManager : MonoBehaviour
         seasonTimer.StartSeasonTimer();
 
         _rooController.UpdateRootInteractables();
+
+        _timeManager.enabled = true;
 
         _gameUI.GameTimeText.gameObject.SetActive(true);
         _gameUI.MainUI.SetActive(true);
@@ -213,7 +219,7 @@ public class GameloopManager : MonoBehaviour
             }
             else if (!TreeStats.SufficentWaterForEnergyConversion())
             {
-                Debug.Log("Not Enough Water");
+                // Debug.Log("Not Enough Water");
             }
 
             return 0.0f;

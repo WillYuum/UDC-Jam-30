@@ -50,21 +50,25 @@ public class DayTimeController : MonoBehaviour
 
     private void Update()
     {
-        float gameTime = _timeManager.GetCurrentTime();
-        float totalDuration = _timeManager.CurrentState == TimeManager.DayNightState.Day ? _timeManager.DayDurationInSeconds : _timeManager.NightDurationInSeconds;
-
-        float ratioToComplete = gameTime / totalDuration;
-
-        Transform activeTransform = _timeManager.CurrentState == TimeManager.DayNightState.Day ? _sunTransform : _moonTransform;
+        float ratioToComplete = _timeManager.CurrentState == TimeManager.DayNightState.Day ? _timeManager.GetDayTimeRatio() : _timeManager.GetNightTimeRatio();
+        Transform activeTransform = _timeManager.GetCurrentState() == TimeManager.DayNightState.Day ? _sunTransform : _moonTransform;
         RotateVisuals(activeTransform, ratioToComplete);
     }
+
+    // private float GetTimeRatio()
+    // {
+    // float currentTime = _timeManager.GetCurrentTime();
+    // float totalCycleDuration = TimeManager.TotalCycleDuration; // Duration of a full day-night cycle
+    // return currentTime / totalCycleDuration;
+    // }
 
     private void RotateVisuals(Transform activeTransform, float ratioToComplete)
     {
         Vector2 center = Vector2.zero;
-        float radians = Mathf.Lerp(0, Mathf.PI, ratioToComplete);
+        float angle = ratioToComplete * Mathf.PI; // 180 degrees (π radians) scaled by the ratio
 
-        activeTransform.position = new Vector2(center.x + _moonSunDistFromCenter * -Mathf.Cos(radians),
-                                               center.y + _moonSunDistFromCenter * Mathf.Sin(radians));
+        // Rotate clockwise from left to right
+        activeTransform.position = new Vector2(center.x + _moonSunDistFromCenter * -Mathf.Cos(angle),
+                                               center.y + _moonSunDistFromCenter * Mathf.Sin(angle));
     }
 }
