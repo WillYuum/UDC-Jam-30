@@ -10,6 +10,23 @@ public class TimeManager : MonoBehaviour
         Night,
     }
 
+    public class DayNightTimeInfo
+    {
+        public int DayTimeStartInHour = 8;
+        public int DayTimeEndInHour = 20;
+
+        public int GetDayTimeDurationInSeconds()
+        {
+            return (DayTimeEndInHour - DayTimeStartInHour) * 60 * 60;
+        }
+
+        public int GetNightTimeDurationInSeconds()
+        {
+            return (24 - (DayTimeEndInHour - DayTimeStartInHour)) * 60 * 60;
+        }
+
+    }
+
     public class CurrentTimeInfo
     {
         public int Hour { get; private set; } = 8;
@@ -17,7 +34,7 @@ public class TimeManager : MonoBehaviour
         public float Second { get; private set; } = 0;
 
 
-        public float GetTotalSeconds()
+        public float GetCurrentTimeInSeconds()
         {
             return Hour * 60 * 60 + Minute * 60 + Second;
         }
@@ -45,8 +62,15 @@ public class TimeManager : MonoBehaviour
             Minute %= 60;                 // Keep minutes within 0-
 
             Hour %= 24;                   // Keep hours within 0-23
+
+            if (Hour >= 24)
+            {
+                Hour = 0;
+            }
         }
     }
+
+    private readonly DayNightTimeInfo _dayNightTimeInfo = new();
 
     private CurrentTimeInfo _currentTimeInfo = new();
     public DayNightState CurrentState { get; private set; } = DayNightState.Day;
@@ -131,8 +155,9 @@ public class TimeManager : MonoBehaviour
         if (CurrentState == DayNightState.Day)
         {
 
-            float dayStartTimeInSeconds = 8 * 60 * 60; // 8 hours in seconds
-            return (_currentTimeInfo.GetTotalSeconds() - dayStartTimeInSeconds) / (12 * 60 * 60); // 12 hours in seconds
+            float totalDuration = _dayNightTimeInfo.GetDayTimeDurationInSeconds();
+            float currentTime = _currentTimeInfo.GetCurrentTimeInSeconds() - _dayNightTimeInfo.DayTimeStartInHour * 60 * 60;
+            return currentTime / totalDuration;
 
         }
         return 0f; // No daytime ratio if it's night
@@ -142,11 +167,25 @@ public class TimeManager : MonoBehaviour
     {
         if (CurrentState == DayNightState.Night)
         {
-            float nightStartTimeInSeconds = 20 * 60 * 60; // 20 hours in seconds
-            return (_currentTimeInfo.GetTotalSeconds() - nightStartTimeInSeconds) / (12 * 60 * 60); // 12 hours in seconds
+            float totalDuration = _dayNightTimeInfo.GetNightTimeDurationInSeconds();
+            float currentTime;
+
+            if (_currentTimeInfo.Hour < _dayNightTimeInfo.DayTimeEndInHour)
+            {
+                // Time is after midnight but before the day starts (e.g., 00:00 to 07:59)
+                currentTime = _currentTimeInfo.GetCurrentTimeInSeconds() + (24 * 60 * 60) - (_dayNightTimeInfo.DayTimeEndInHour * 60 * 60);
+            }
+            else
+            {
+                // Normal night time (e.g., 20:00 to 23:59)
+                currentTime = _currentTimeInfo.GetCurrentTimeInSeconds() - (_dayNightTimeInfo.DayTimeEndInHour * 60 * 60);
+            }
+
+            return currentTime / totalDuration;
         }
         return 0f; // No nighttime ratio if it's day
     }
+
 
     public string GetCurrentTimeIn24HourFormat()
     {

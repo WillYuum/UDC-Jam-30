@@ -1,10 +1,12 @@
 using System;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class DayTimeController : MonoBehaviour
 {
     [SerializeField] private Transform _sunTransform;
     [SerializeField] private Transform _moonTransform;
+    [SerializeField] private SkyVisual _skyVisual;
 
     private float _moonSunDistFromCenter = 4.75f;
     private TimeManager _timeManager;
@@ -54,6 +56,15 @@ public class DayTimeController : MonoBehaviour
         Debug.Log($"DayNightTime ratio: {ratioToComplete}");
         Transform activeTransform = _timeManager.GetCurrentState() == TimeManager.DayNightState.Day ? _sunTransform : _moonTransform;
         RotateVisuals(activeTransform, ratioToComplete);
+
+        if (_timeManager.CurrentState == TimeManager.DayNightState.Day)
+        {
+            _skyVisual.InterplateSkyColorToDark(ratioToComplete);
+        }
+        else
+        {
+            _skyVisual.InterplateSkyColorToLight(ratioToComplete);
+        }
     }
 
     private void RotateVisuals(Transform activeTransform, float ratioToComplete)
@@ -64,5 +75,28 @@ public class DayTimeController : MonoBehaviour
         // Rotate clockwise from left to right
         activeTransform.position = new Vector2(center.x + _moonSunDistFromCenter * -Mathf.Cos(angle),
                                                center.y + _moonSunDistFromCenter * Mathf.Sin(angle));
+    }
+}
+
+
+[System.Serializable]
+public class SkyVisual
+{
+    [SerializeField] private SpriteRenderer _skySpriteRenderer;
+
+
+    private Color lightSkyColor = new Color(1.0f, 1.0f, 1.0f, 1f);
+    private Color darkSkyColor = new Color(0.1f, 0.1f, 0.1f, 1f);
+
+    public void InterplateSkyColorToDark(float ratio)
+    {
+        ratio = EasingFunctions.EaseInExpo(ratio);
+        _skySpriteRenderer.color = Color.Lerp(lightSkyColor, darkSkyColor, ratio);
+    }
+
+    public void InterplateSkyColorToLight(float ratio)
+    {
+        ratio = EasingFunctions.EaseInExpo(ratio);
+        _skySpriteRenderer.color = Color.Lerp(darkSkyColor, lightSkyColor, ratio);
     }
 }

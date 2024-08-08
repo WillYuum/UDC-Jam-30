@@ -3785,6 +3785,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sunTransform: {fileID: 640187392}
   _moonTransform: {fileID: 821240708}
+  _skyVisual:
+    _skySpriteRenderer: {fileID: 9913414}
 --- !u!1 &1300802335
 GameObject:
   m_ObjectHideFlags: 0
