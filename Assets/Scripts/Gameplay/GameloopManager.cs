@@ -9,6 +9,7 @@ public class GameloopManager : MonoBehaviour
 
     private GameUI _gameUI;
 
+    [HideInInspector] public List<GameObject> DiscoveredTrees { get; private set; }
 
     [SerializeField] public TreeStats TreeStats { get; private set; }
     [SerializeField] public EnergyCostOfLiving EnergyCostOfLiving { get; private set; }
@@ -36,6 +37,9 @@ public class GameloopManager : MonoBehaviour
         EnergyCostOfLiving = new EnergyCostOfLiving();
 
         _rooController = FindObjectOfType<RootController>();
+
+        DiscoveredTrees = new List<GameObject>();
+        DiscoveredTrees.AddRange(GameObject.FindGameObjectsWithTag("Tree"));
 
 
         void InvokeLifeCycleEvents()
