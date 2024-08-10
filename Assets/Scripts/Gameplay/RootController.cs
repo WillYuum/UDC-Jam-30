@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RootController : MonoBehaviour
@@ -19,12 +21,34 @@ public class RootController : MonoBehaviour
 
     [SerializeField] private Transform MaxYRootSpawnPoint;
 
-
-
+    private List<RootGrowth> _rootsGrowing = new();
     void Update()
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+        if (_rootsGrowing.Count > 0)
+        {
+            float growRate = Time.deltaTime;
+            foreach (RootGrowth rootGrowth in _rootsGrowing)
+            {
+                if (rootGrowth == null)
+                {
+                    _rootsGrowing.Remove(rootGrowth);
+                    continue;
+                }
+                else
+                {
+                    rootGrowth.Grow(growRate);
+
+                    if (rootGrowth.IsFullyGrown())
+                    {
+                        _rootsGrowing.Remove(rootGrowth);
+                        Destroy(rootGrowth);
+                    }
+                }
+
+            }
+        }
 
 
         if (Input.GetMouseButtonDown(0))
@@ -88,7 +112,6 @@ public class RootController : MonoBehaviour
         _spawnedRoot.UpdateEndPosition(position);
 
         _isDragging = true;
-
     }
 
     private void UpdateCurrentSegment(Vector2 currentMousePosition)
@@ -104,6 +127,7 @@ public class RootController : MonoBehaviour
         currentMousePosition.y = Math.Min(currentMousePosition.y, MaxYRootSpawnPoint.position.y);
 
         _spawnedRoot.UpdateEndPosition(currentMousePosition);
+        _spawnedRoot.ActualEndPosition = currentMousePosition;
     }
 
     private void EndCreateRootSegment(Vector2 mousePosition)
@@ -135,13 +159,16 @@ public class RootController : MonoBehaviour
             CollectWaterObserver.instance.ObserveRoot(_spawnedRoot);
         }
 
-        _spawnedRoot.SetEndPosition(mousePosition);
+
+
+        RootGrowth rootGrowth = _spawnedRoot.AddComponent<RootGrowth>();
+        _rootsGrowing.Add(rootGrowth);
+
+        RootCount += 1;
+
         _spawnedRoot.SetNodeConnection(Instantiate(_rootInteractablePrefab, mousePosition, Quaternion.identity).gameObject);
         _isDragging = false;
         _spawnedRoot = null;
-
-
-        RootCount += 1;
     }
 
 

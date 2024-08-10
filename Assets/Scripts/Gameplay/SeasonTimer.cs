@@ -42,7 +42,7 @@ public class SeasonTimer : MonoBehaviour
         if (_gameTicker.IsFastMode)
         {
             // When in fast mode, adjust season timer based on fast forward multiplier
-            _timeTillNextSeason -= _gameTicker.FastForwardMultiplier * _gameTicker.TickDuration;
+            _timeTillNextSeason -= _gameTicker.TimeMultiplier * _gameTicker.TickDuration;
         }
         else
         {
