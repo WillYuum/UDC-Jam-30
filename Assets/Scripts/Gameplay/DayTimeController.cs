@@ -53,7 +53,7 @@ public class DayTimeController : MonoBehaviour
     private void Update()
     {
         float ratioToComplete = _timeManager.CurrentState == TimeManager.DayNightState.Day ? _timeManager.GetDayTimeRatio() : _timeManager.GetNightTimeRatio();
-        Debug.Log($"DayNightTime ratio: {ratioToComplete}");
+
         Transform activeTransform = _timeManager.GetCurrentState() == TimeManager.DayNightState.Day ? _sunTransform : _moonTransform;
         RotateVisuals(activeTransform, ratioToComplete);
 

@@ -51,7 +51,6 @@ public class TimeManager : MonoBehaviour
 
         public void IncrementTimeInSeconds(float timeToIncrement)
         {
-            Debug.Log("IncrementTime " + timeToIncrement);
 
             // Add the time increment to the current time
             float newTime = Second + timeToIncrement;
