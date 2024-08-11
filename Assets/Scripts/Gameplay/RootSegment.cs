@@ -48,7 +48,7 @@ public class RootSegment : MonoBehaviour
 
     public Vector2 GetEndPosition()
     {
-        return _lineRenderer.GetPosition(0);
+        return _lineRenderer.GetPosition(1);
     }
 
     public bool IsWaterColliding(out WaterResource[] waterResource)

@@ -129,8 +129,6 @@ public class GameloopManager : MonoBehaviour
         SeasonTimer seasonTimer = FindObjectOfType<SeasonTimer>();
         seasonTimer.StartSeasonTimer();
 
-        _rooController.UpdateRootInteractables();
-
         _timeManager.enabled = true;
 
         _gameUI.GameTimeText.gameObject.SetActive(true);
@@ -162,6 +160,18 @@ public class GameloopManager : MonoBehaviour
         SetupListentingToEndGame();
 
         ToggleLoop(true);
+    }
+
+
+    public void EnterBuildMode()
+    {
+        _rooController.ToggleRootInteractables(true);
+    }
+
+
+    public void ExitBuildMode()
+    {
+        _rooController.ToggleRootInteractables(false);
     }
 
 

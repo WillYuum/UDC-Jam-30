@@ -29,7 +29,8 @@ public class RootController : MonoBehaviour
         if (_rootsGrowing.Count > 0)
         {
             float growRate = Time.deltaTime;
-            foreach (RootGrowth rootGrowth in _rootsGrowing)
+            RootGrowth[] rootGrowthRef = _rootsGrowing.ToArray();
+            foreach (RootGrowth rootGrowth in rootGrowthRef)
             {
                 if (rootGrowth == null)
                 {
@@ -68,7 +69,7 @@ public class RootController : MonoBehaviour
         }
     }
 
-    public void UpdateRootInteractables()
+    public void ToggleRootInteractables(bool active)
     {
         //Destroy all root interactables
         foreach (Transform child in _rootInteractableHolder)
@@ -76,14 +77,26 @@ public class RootController : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        //add new root interactables
-        RootSegment[] rootSegments = _renderLinesHolder.GetComponentsInChildren<RootSegment>();
-
-        foreach (RootSegment rootSegment in rootSegments)
+        if (active)
         {
-            Instantiate(_rootInteractablePrefab, rootSegment.GetEndPosition(), Quaternion.identity);
-            // rootSegment.SetEndPosition(rootSegment.transform.position);
+            //add new root interactables
+            RootSegment[] rootSegments = _renderLinesHolder.GetComponentsInChildren<RootSegment>();
+
+            foreach (RootSegment rootSegment in rootSegments)
+            {
+                Debug.Log("RootSegment name: " + rootSegment.name);
+                // Instantiate(_rootInteractablePrefab, rootSegment.GetEndPosition(), Quaternion.identity, _rootInteractableHolder);
+                CreateRootInteractable(rootSegment.GetEndPosition());
+                // rootSegment.SetEndPosition(rootSegment.transform.position);
+
+            }
         }
+    }
+
+
+    private RootInteractable CreateRootInteractable(Vector2 position)
+    {
+        return Instantiate(_rootInteractablePrefab, position, Quaternion.identity, _rootInteractableHolder);
     }
 
 
@@ -166,7 +179,8 @@ public class RootController : MonoBehaviour
 
         RootCount += 1;
 
-        _spawnedRoot.SetNodeConnection(Instantiate(_rootInteractablePrefab, mousePosition, Quaternion.identity).gameObject);
+        _spawnedRoot.SetNodeConnection(CreateRootInteractable(mousePosition).gameObject);
+
         _isDragging = false;
         _spawnedRoot = null;
     }
