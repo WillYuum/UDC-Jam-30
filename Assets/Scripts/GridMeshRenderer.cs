@@ -20,33 +20,25 @@ public class GridMeshRenderer : MonoBehaviour
     [SerializeField] public int cellsBottom = 5;
 
     private MeshRenderer _meshRenderer;
-
     private Mesh _mesh;
+    private Shader gridShader;
+
     private Vector3[] vertices;
     private int[] indices;
-
-    private Shader gridShader;
 
     private void Awake()
     {
         SetupRequiredVariables();
-    }
-
-    void Start()
-    {
-        // Optional initialization if needed
+        DrawGridMesh();
     }
 
     void Update()
     {
-        DrawGridMesh();
+
     }
 
     public void DrawGridMesh()
     {
-#if UNITY_EDITOR
-        SetupRequiredVariables();
-#endif
         float cellSize = _grid.cellSize.x;
 
         // Calculate grid bounds based on the number of cells
@@ -83,15 +75,17 @@ public class GridMeshRenderer : MonoBehaviour
         }
 
         // Set mesh properties
+        _mesh.Clear();
         _mesh.vertices = vertices;
         _mesh.SetIndices(indices, MeshTopology.Lines, 0);
         _mesh.RecalculateBounds();
 
-        // Apply grid color
+        // Apply grid color and thickness
         Material material = new(gridShader)
         {
             color = _gridColor
         };
+        material.SetFloat("_LineThickness", _gridThickness);
         _meshRenderer.material = material;
     }
 
@@ -105,6 +99,5 @@ public class GridMeshRenderer : MonoBehaviour
         GetComponent<MeshFilter>().mesh = _mesh;
 
         gridShader = Shader.Find("Unlit/Color");
-
     }
 }
