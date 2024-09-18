@@ -2588,7 +2588,7 @@ MonoBehaviour:
   _gridThickness: 0.1
   cellsLeft: 5
   cellsRight: 5
-  cellsTop: 2
+  cellsTop: 1
   cellsBottom: 10
 --- !u!23 &698793454
 MeshRenderer:
