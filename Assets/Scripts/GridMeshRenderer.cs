@@ -33,6 +33,10 @@ public class GridMeshRenderer : MonoBehaviour
         float boxWidth = (cellsLeft + cellsRight) * _grid.cellSize.x;
         float boxHeight = (cellsTop + cellsBottom) * _grid.cellSize.y;
         _boxCollider.size = new Vector2(boxWidth, boxHeight);
+
+        float xOffset = (cellsRight - cellsLeft) * _grid.cellSize.x / 2;
+        float yOffset = (cellsTop - cellsBottom) * _grid.cellSize.y / 2;
+        _boxCollider.offset = new Vector2(xOffset, yOffset);
     }
 
     public void DrawGridMesh()
